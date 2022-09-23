@@ -5,7 +5,7 @@ module.exports = class DiscordEvent {
     name;
 
     /**
-     * @type {Boolean}
+     * @type {Boolean | undefined}
      */
     once;
 

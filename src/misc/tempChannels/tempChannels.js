@@ -1,7 +1,7 @@
 const interfaceHandler = require('@root/src/misc/tempChannels/tempInterfaces.js');
 const { Client, VoiceState, VoiceChannel } = require('discord.js');
 const DiscordChannel = require('../classes/channel');
-const { handleCreateThread, handleDestroyThread } = require('./tempThreads');
+const { handleCreateThread, handleDestroyThread, handleOwnerThread } = require('./tempThreads');
 
 const CHANNEL_IDS = {
 	CHISMECITO: '1021992618206433350',
@@ -24,7 +24,6 @@ const GAMING_NAMES = [
 	`👾┃Arcade`,
 	`🎰┃Casino`
 ];
-
 const HOMEWORK_NAMES = [
 	`📚┃Estudio`,
 	`🧪┃Laboratorio`,
@@ -135,8 +134,6 @@ const handleTransDelChannel = (oldState, newState, client) => {
 		return channelId === oldState.channelId;
 	});
 
-	console.log(channel)
-
 	// Not owner of the channel
 	if (channel === undefined || oldState.channel === null) return;
 
@@ -145,7 +142,8 @@ const handleTransDelChannel = (oldState, newState, client) => {
 		channel.memberId = oldState.channel.members.at(0).id;
 
 		// TODO Modify everything else owo
-		//tmpChanHandler.handleEditChannel()
+		//
+		handleOwnerThread(oldState, channel, client);
 
 		return;
 	}

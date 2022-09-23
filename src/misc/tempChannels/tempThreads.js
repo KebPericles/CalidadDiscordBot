@@ -4,11 +4,11 @@ const THREAD_CHANNEL_ID = '1022301261678247996';
 
 
 const createThreadOptions = (newState) => {
-	return {
-		name: `interfaz-${newState.member.id}`,
-		reason: 'Needed a separate thread for managing the temp vc'
+    return {
+        name: `interfaz-${newState.member.id}`,
+        reason: 'Needed a separate thread for managing the temp vc'
 
-	};
+    };
 }
 
 /**
@@ -34,7 +34,7 @@ const handleCreateThread = async (state, client) => {
  * @param {DiscordChannel} channel 
  * @param {Client} client 
  */
-const handleDestroyThread = async (state, channel,client)=>{
+const handleDestroyThread = async (state, channel, client) => {
     /**
      * @type {TextChannel}
      */
@@ -45,8 +45,33 @@ const handleDestroyThread = async (state, channel,client)=>{
      */
     const thread = await threadChannelParent.threads.fetch(channel.threadId);
     await thread.delete('No queremos mil threads >_<');
-    
+
+}
+
+/**
+ * 
+ * @param {VoiceState} state 
+ * @param {DiscordChannel} channel 
+ * @param {Client} client 
+ */
+const handleOwnerThread = async (state, channel, client) => {
+    /**
+     * @type {TextChannel}
+     */
+    const threadChannelParent = await state.guild.channels.fetch(THREAD_CHANNEL_ID);
+    /**
+     * @type {ThreadChannel}
+     */
+    const thread = await threadChannelParent.threads.fetch(channel.threadId);
+
+    let member =
+        state.channel.members.at(0) !== state.member
+            ? state.channel.members.at(0)
+            : state.channel.members.at(1);
+
+    thread.send(`<@${member.id}>`);
 }
 
 module.exports.handleCreateThread = handleCreateThread;
 module.exports.handleDestroyThread = handleDestroyThread;
+module.exports.handleOwnerThread = handleOwnerThread;

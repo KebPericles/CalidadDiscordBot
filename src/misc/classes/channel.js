@@ -4,7 +4,7 @@ module.exports = class DiscordChannel{
      */
     memberId;
     /**
-     * 
+     * @type {String}
      */
     channelId;
     /**

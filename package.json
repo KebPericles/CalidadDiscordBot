@@ -11,10 +11,11 @@
   "dependencies": {
     "discord.js": "^14.3.0",
     "dotenv": "^16.0.2",
-    "module-alias": "^2.2.2"
+    "module-alias": "^2.2.2",
+    "node-fetch": "^3.2.10"
   },
   "_moduleAliases": {
     "@root": ".",
-    "@src":"./src"
+    "@src": "./src"
   }
 }
