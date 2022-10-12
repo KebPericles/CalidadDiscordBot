@@ -11,7 +11,7 @@ const {
 
 const MemeTemplate = require("./../../misc/classes/memeTemplate.js");
 
-const pageDensity = 25;
+const pageDensity = 5;
 
 const {
 	getMemeTemplates,
@@ -42,7 +42,7 @@ const embedPage = async (client, page) => {
 	let embed = createEmbed(client).setTitle("Lista de memes:");
 
 	for (let i = 0; i < pageDensity; i++) {
-		let template = templates[(page - 1) * pageDensity + i];
+		let template = templates[(page) * pageDensity + i];
 
 		if (!template) {
 			break;
@@ -50,7 +50,7 @@ const embedPage = async (client, page) => {
 
 		embed.addFields({
 			name: template.id,
-			value: `${template.name}\n${template.blank}`,
+			value: `${template.name}\nNúmero de líneas:${template.lines}\n${template.blank}\nEjemplo:${template.example.url}`,
 		});
 	}
 
@@ -110,9 +110,9 @@ module.exports = {
 				components.push(buttons);
 
 				let pages = Math.ceil(templates.length / pageDensity);
-				let selPage = interaction.options._hoistedOptions[0].value;
+				let selPage = interaction.options._hoistedOptions[0].value - 1;
 
-				if (pages < selPage || selPage < 1) {
+				if (pages < selPage || selPage < 0) {
 					await interaction.deferReply({
 						fetchReply: true,
 						ephemeral: true,
@@ -137,15 +137,18 @@ module.exports = {
 				const listCollector =
 					listMessage.createMessageComponentCollector({
 						componentType: ComponentType.Button,
+						time: 60000
 					});
 
 				listCollector.on("collect", async (i) => {
 					selPage += i.customId == "next" ? 1 : -1;
-					listMessage.edit({
+					selPage = (selPage + pages) % pages;
+					await i.message.edit({
 						embeds: [await embedPage(client, selPage)],
 						components: components,
 					});
-					return i;
+					i.deferUpdate();
+					listCollector.stop();
 				});
 
 				return;

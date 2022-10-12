@@ -18,6 +18,7 @@ const client = new Client({
 client.commands = new Collection();
 client.commandArray = [];
 client.createdChannels = [];
+client.myCustomComponents = [];
 
 const functionFolders = fs.readdirSync(`./${FUNCTIONS_DIR}`);
 for (const folder of functionFolders) {
@@ -30,4 +31,5 @@ for (const folder of functionFolders) {
 
 client.handleEvents();
 client.handleCommands();
+client.handleComponents();
 client.login(BOT_TOKEN);

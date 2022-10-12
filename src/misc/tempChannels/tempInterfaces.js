@@ -62,7 +62,7 @@ const handleInterface = async (client, threadChannel, newState) => {
 				.setStyle(ButtonStyle.Primary),
 		);
 
-	threadChannel.send({ embeds: [interfaceEmbed], components: [row] });
+	let messageToCollect = await threadChannel.send({ embeds: [interfaceEmbed], components: [row] });
 
 	// TODO SEND MESSAGE TO THE OWNER OF THE CHANNEL
 	let dmEmbed = createDMEmbed(newState);

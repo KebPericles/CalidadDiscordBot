@@ -1,4 +1,3 @@
-const { doesNotReject } = require('assert');
 const { Client } = require('discord.js');
 const fs = require('fs');
 const DiscordEvent = require('../../misc/classes/event');
