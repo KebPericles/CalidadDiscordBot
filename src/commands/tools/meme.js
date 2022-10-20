@@ -89,6 +89,11 @@ module.exports = {
 	 * @param {Client} client
 	 */
 	async execute(interaction, client) {
+		// MESSAGE RECEIVED
+		const message = await interaction.deferReply({
+			fetchReply: true,
+		});
+
 		let subcommand = interaction.options._subcommand;
 		let templates = await getMemeTemplates();
 		let components = [];
@@ -114,28 +119,21 @@ module.exports = {
 				let selPage = interaction.options._hoistedOptions[0].value - 1;
 
 				if (pages < selPage || selPage < 0) {
-					await interaction.deferReply({
-						fetchReply: true,
-						ephemeral: true,
-					});
 
 					await interaction.editReply({
 						content: `Hay un máximo de ${pages} páginas`,
+						ephemeral: true
 					});
 
 					return;
 				}
 
-				/**
-				 * @type {Message}
-				 */
-				const listMessage = await interaction.deferReply({
-					fetchReply: true,
-				});
+				const listMessage = await interaction.fetchReply();
 
-				await interaction.editReply({
+				await listMessage.edit({
 					embeds: [await embedPage(client, selPage)],
 					components: components,
+					ephemeral: true
 				});
 
 				const listCollector =
@@ -153,7 +151,6 @@ module.exports = {
 						components: components,
 					});
 					i.deferUpdate();
-					listCollector.stop();
 				});
 
 				return;
@@ -162,21 +159,12 @@ module.exports = {
 			case "update-list":
 				await updateMemeTemplates();
 
-				const messageUpdate = await interaction.deferReply({
-					fetchReply: true,
-					ephemeral: true,
-				});
-
 				await interaction.editReply({
 					content: ":white_check_mark:",
 				});
 
 				return;
 		}
-
-		const message = await interaction.deferReply({
-			fetchReply: true,
-		});
 
 		await interaction.editReply({
 			embeds: [embed],

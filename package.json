@@ -17,5 +17,8 @@
   "_moduleAliases": {
     "@root": ".",
     "@src": "./src"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }

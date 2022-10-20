@@ -1,5 +1,11 @@
+const { CommandInteraction, Client } = require("discord.js");
+
 module.exports = {
     name: 'interactionCreate',
+    /**
+	 * @param {CommandInteraction} interaction
+	 * @param {Client} client
+	 */
     async execute(interaction, client) {
         if (interaction.isChatInputCommand()) {
             const { commands } = client;
@@ -12,7 +18,7 @@ module.exports = {
                 await command.execute(interaction, client);
             } catch (error) {
                 console.error(error);
-                await interaction.reply({
+                await interaction.editReply({
                     content: `Something went wrong while executing this command`,
                     ephemeral: true
                 })

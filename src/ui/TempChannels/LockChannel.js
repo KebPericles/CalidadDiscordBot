@@ -4,10 +4,8 @@ const DiscordUserInterface = require("../../misc/classes/ui");
 /**
  * @type {DiscordUserInterface}
  */
-module.exports = {
-
+module.exports = new DiscordUserInterface({
     embeds: [],
     components: [],
     collectorsToCreate: []
-
-}
+})
