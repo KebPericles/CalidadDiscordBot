@@ -7,6 +7,7 @@ const {
 	ButtonBuilder,
 	ButtonStyle,
 	ComponentType,
+	Message,
 } = require("discord.js");
 
 const MemeTemplate = require("./../../misc/classes/memeTemplate.js");
@@ -125,6 +126,9 @@ module.exports = {
 					return;
 				}
 
+				/**
+				 * @type {Message}
+				 */
 				const listMessage = await interaction.deferReply({
 					fetchReply: true,
 				});
@@ -140,6 +144,7 @@ module.exports = {
 						time: 60000
 					});
 
+				// dispose | collect | ignore
 				listCollector.on("collect", async (i) => {
 					selPage += i.customId == "next" ? 1 : -1;
 					selPage = (selPage + pages) % pages;
