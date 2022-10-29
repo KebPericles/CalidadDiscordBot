@@ -16,7 +16,8 @@
   },
   "_moduleAliases": {
     "@root": ".",
-    "@src": "./src"
+    "@src": "./src",
+    "@ui": "./src/ui"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"

@@ -6,6 +6,7 @@ const FUNCTIONS_DIR = 'src/functions';
 
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const fs = require('fs');
+const { builtinModules } = require('module');
 
 const client = new Client({
 	intents: [
@@ -33,3 +34,5 @@ client.handleEvents();
 client.handleCommands();
 client.handleUis();
 client.login(BOT_TOKEN);
+
+module.exports.client = client;

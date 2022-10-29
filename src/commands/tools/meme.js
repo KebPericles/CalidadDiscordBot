@@ -9,6 +9,7 @@ const {
 	ComponentType,
 	Message,
 } = require("discord.js");
+const DiscordUserInterface = require("../../misc/classes/ui.js");
 
 const MemeTemplate = require("./../../misc/classes/memeTemplate.js");
 
@@ -98,8 +99,6 @@ module.exports = {
 		let templates = await getMemeTemplates();
 		let components = [];
 
-		const embed = createEmbed(client);
-
 		switch (subcommand) {
 			case "list":
 				const buttons = new ActionRowBuilder().addComponents(
@@ -118,6 +117,8 @@ module.exports = {
 				let pages = Math.ceil(templates.length / pageDensity);
 				let selPage = interaction.options._hoistedOptions[0].value - 1;
 
+				interaction.page = selPage;
+
 				if (pages < selPage || selPage < 0) {
 
 					await interaction.editReply({
@@ -130,28 +131,34 @@ module.exports = {
 
 				const listMessage = await interaction.fetchReply();
 
-				await listMessage.edit({
-					embeds: [await embedPage(client, selPage)],
-					components: components,
-					ephemeral: true
-				});
+				/**
+				 * @type {DiscordUserInterface}
+				 */
+				 let memeList = require('@ui/Memes/MemeList');
+				 memeList.sendInterface(interaction);
 
-				const listCollector =
-					listMessage.createMessageComponentCollector({
-						componentType: ComponentType.Button,
-						time: 60000
-					});
+				// await listMessage.edit({
+				// 	embeds: [await embedPage(client, selPage)],
+				// 	components: components,
+				// 	ephemeral: true
+				// });
 
-				// dispose | collect | ignore
-				listCollector.on("collect", async (i) => {
-					selPage += i.customId == "next" ? 1 : -1;
-					selPage = (selPage + pages) % pages;
-					await i.message.edit({
-						embeds: [await embedPage(client, selPage)],
-						components: components,
-					});
-					i.deferUpdate();
-				});
+				// const listCollector =
+				// 	listMessage.createMessageComponentCollector({
+				// 		componentType: ComponentType.Button,
+				// 		time: 60000
+				// 	});
+
+				// // dispose | collect | ignore
+				// listCollector.on("collect", async (i) => {
+				// 	selPage += i.customId == "next" ? 1 : -1;
+				// 	selPage = (selPage + pages) % pages;
+				// 	await i.message.edit({
+				// 		embeds: [await embedPage(client, selPage)],
+				// 		components: components,
+				// 	});
+				// 	i.deferUpdate();
+				// });
 
 				return;
 			case "create":
@@ -165,6 +172,8 @@ module.exports = {
 
 				return;
 		}
+
+		const embed = createEmbed(client);
 
 		await interaction.editReply({
 			embeds: [embed],
