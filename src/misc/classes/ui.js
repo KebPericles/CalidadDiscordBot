@@ -10,7 +10,7 @@ module.exports = class DiscordUserInterface {
     constructor(ui) {
         this.components = ui.components;
         this.embeds = ui.embeds;
-        this.collectorsToCreate = this.collectorsToCreate;
+        this.collectorsToCreate = ui.collectorsToCreate;
         this.ephemeral = ui.ephemeral;
     }
 
@@ -20,10 +20,14 @@ module.exports = class DiscordUserInterface {
      */
     sendInterface = async (interaction) => {
         let embeds = [];
-        this.embeds.forEach(async embed => embeds.push(await embed(interaction)));
+        for (const embed of this.embeds) {
+            embeds.push(await embed(interaction));
+        }
 
         let comps = [];
-        this.components.forEach(async component => comps.push((await component).getComponent()));
+        for (const component of this.components) {
+            comps.push((await component()).getComponent())
+        }
 
         await interaction.editReply({
             embeds: embeds,
@@ -42,12 +46,14 @@ module.exports = class DiscordUserInterface {
          */
         let collectors = [];
 
-        this.collectorsToCreate.forEach(async collector => {
+        for (const collector of this.collectorsToCreate) {
             collectors.push((await interaction.fetchReply()).createMessageComponentCollector({
                 componentType: collector.componentType,
                 time: collector.time
             }));
-        });
+        }
+
+        console.log(collectors)
 
         // Search components for each collector
         collectors.forEach(async collector => {
@@ -58,13 +64,16 @@ module.exports = class DiscordUserInterface {
 
             // We search the components that are action rows
             let actionRowComps = this.components.filter(async component => {
-                let c = await component;
+                /**
+                 * @type {DiscordComponent}
+                 */
+                let c = await component();
                 if (c.componentType === ComponentType.ActionRow) return c.componentType === collector.componentType;
             });
 
             // We search in the components of the ActionRow and include them in the array if they meet the condition
-            actionRowComps.forEach(rowComp => {
-                comps.push(rowComp.childComponents.filter(childComp => {
+            actionRowComps.forEach(async rowComp => {
+                comps.push((await rowComp()).childComponents.filter(childComp => {
                     return childComp.componentType === collector.componentType;
                 }))
             });
@@ -81,7 +90,7 @@ module.exports = class DiscordUserInterface {
     }
 
     /**
-     * @type {Array<(interaction:BaseInteraction)=>EmbedBuilder>}
+     * @type {Array<Promise<EmbedBuilder>>}
      */
     embeds;
     /**

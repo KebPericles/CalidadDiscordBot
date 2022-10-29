@@ -7,6 +7,8 @@ const {
     getMemeTemplates
 } = require("../../misc/memeGenerator/memeTemplateHandler");
 
+const pageDensity = 5;
+
 /**
  * 
  * @returns {EmbedBuilder}
@@ -19,7 +21,7 @@ const createEmbed = () => {
             iconURL:
                 "https://cdn.discordapp.com/emojis/771974836322959360.webp",
         })
-        .setThumbnail(client.user.avatarURL())
+        //.setThumbnail(client.user.avatarURL())
         .setFooter({
             text: "Bot hecho con calidad por Queso y Pan de piña",
             iconURL:
@@ -62,22 +64,37 @@ const childComponents = [
         componentType: ComponentType.Button,
         id: "previous",
         collect: async (i) => {
+            i.deferUpdate();
             selPage += i.customId == "next" ? 1 : -1;
             selPage = (selPage + pages) % pages;
             await i.message.edit({
                 embeds: [await embedPage(client, selPage)],
                 components: components,
             });
-            i.deferUpdate();
+            
         }
     }),
-    new ButtonBuilder()
-        .setCustomId("next")
-        .setEmoji("▶️")
-        .setStyle(ButtonStyle.Secondary)
+    new DiscordComponent({
+        component:
+            new ButtonBuilder()
+                .setCustomId("next")
+                .setEmoji("▶️")
+                .setStyle(ButtonStyle.Secondary),
+        componentType: ComponentType.Button,
+        id: "next",
+        collect: async (i) => {
+            i.deferUpdate();
+            selPage += i.customId == "next" ? 1 : -1;
+            selPage = (selPage + pages) % pages;
+            await i.message.edit({
+                embeds: [await embedPage(client, selPage)],
+                components: components,
+            });
+        }
+    })
 ];
 
-const actionRow = () => {
+const actionRow = async () => {
     return new DiscordComponent({
         component: new ActionRowBuilder(),
         componentType: ComponentType.ActionRow,

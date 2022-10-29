@@ -134,8 +134,9 @@ module.exports = {
 				/**
 				 * @type {DiscordUserInterface}
 				 */
-				 let memeList = require('@ui/Memes/MemeList');
-				 memeList.sendInterface(interaction);
+				let memeList = require('@ui/Memes/MemeList');
+				await memeList.sendInterface(interaction);
+				await memeList.createCollectors(interaction);
 
 				// await listMessage.edit({
 				// 	embeds: [await embedPage(client, selPage)],

@@ -5,16 +5,17 @@ module.exports = class DiscordComponent {
      * 
      * @param {DiscordComponent} dc 
      */
-    constructor(dc){
-        this.component = dc.component;
-        this.childComponents = dc.childComponents;
-        this.collect = dc.collect;
-        this.componentType = dc.componentType;
-        this.dispose = dc.dispose;
-        this.id = dc.id;
-        this.ignore = dc.ignore;
-        this.isRowComponent = dc.isRowComponent;
+    constructor({ component, childComponents, collect, componentType, dispose, id, ignore,isRowComponent = false } = {}){
+        this.component = component;
+        this.childComponents = childComponents;
+        this.collect = collect;
+        this.componentType = componentType;
+        this.dispose = dispose;
+        this.id = id;
+        this.ignore = ignore;
+        this.isRowComponent = isRowComponent;
     }
+    
     getComponent = () => {
         if(!this.isRowComponent) return this.component;
 
@@ -22,7 +23,10 @@ module.exports = class DiscordComponent {
          * @type {ActionRowBuilder}
          */
         let row = this.component;
-        this.childComponents.forEach(childComp => row.addComponents(childComp.component));
+        let childComps = [];
+        this.childComponents.forEach(childComp => childComps.push(childComp.getComponent()));
+        row.addComponents(childComps);
+        return row;
     }
     /**
      * Indicates if it is an ActionRow, 
