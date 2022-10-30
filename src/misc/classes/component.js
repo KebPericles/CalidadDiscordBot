@@ -1,11 +1,11 @@
-const { ButtonInteraction, Awaitable, ComponentType, ComponentBuilder, ActionRowBuilder } = require("discord.js");
+const { ButtonInteraction, Awaitable, ComponentType, ComponentBuilder, ActionRowBuilder, CommandInteraction } = require("discord.js");
 
 module.exports = class DiscordComponent {
     /**
      * 
      * @param {DiscordComponent} dc 
      */
-    constructor({ component, childComponents, collect, componentType, dispose, id, ignore,isRowComponent = false } = {}){
+    constructor({ component, childComponents, collect, componentType, dispose, id, ignore, isRowComponent = false }) {
         this.component = component;
         this.childComponents = childComponents;
         this.collect = collect;
@@ -15,9 +15,9 @@ module.exports = class DiscordComponent {
         this.ignore = ignore;
         this.isRowComponent = isRowComponent;
     }
-    
+
     getComponent = () => {
-        if(!this.isRowComponent) return this.component;
+        if (!this.isRowComponent) return this.component;
 
         /**
          * @type {ActionRowBuilder}
@@ -32,7 +32,7 @@ module.exports = class DiscordComponent {
      * Indicates if it is an ActionRow, 
      * @type {Boolean}
      */
-    isRowComponent=false;
+    isRowComponent = false;
     /**
      * @type {ComponentBuilder}
      */
@@ -44,21 +44,21 @@ module.exports = class DiscordComponent {
     /**
      * @type {String}
      */
-    id="";
+    id = "";
     /**
      * @type {ComponentType}
      */
     componentType;
     /**
-     * @type {(interaction: ButtonInteraction)=> Awaitable<void>}
+     * @type {(interaction: ButtonInteraction, commandInteraction: CommandInteraction)=> Awaitable<void>}
      */
-    dispose=()=>{};
+    dispose = () => { };
     /**
-     * @type {(interaction: ButtonInteraction)=> Awaitable<void>}
+     * @type {(interaction: ButtonInteraction, commandInteraction: CommandInteraction)=> Awaitable<void>}
      */
-    collect=()=>{};
+    collect = () => { };
     /**
-     * @type {(interaction: ButtonInteraction)=> Awaitable<void>}
+     * @type {(interaction: ButtonInteraction, commandInteraction: CommandInteraction)=> Awaitable<void>}
      */
-    ignore=()=>{};
+    ignore = () => { };
 }

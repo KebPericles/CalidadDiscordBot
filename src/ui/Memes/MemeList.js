@@ -1,4 +1,4 @@
-const { Client, EmbedBuilder, BaseInteraction, ActionRowBuilder, ComponentType, ButtonBuilder, ButtonStyle } = require("discord.js");
+const { Client, EmbedBuilder, BaseInteraction, ActionRowBuilder, ComponentType, ButtonBuilder, ButtonStyle, ButtonInteraction, CommandInteraction } = require("discord.js");
 const { client } = require("../../bot");
 const DiscordCollector = require("../../misc/classes/collector");
 const DiscordComponent = require("../../misc/classes/component");
@@ -54,6 +54,30 @@ const embedPage = async (interaction) => {
     return embed;
 };
 
+/**
+ * 
+ * @param {ButtonInteraction} interaction 
+ * @param {CommandInteraction} command 
+ */
+const collectEvent = async (interaction, command) => {
+    let templates = await getMemeTemplates();
+    this.selPage = this.selPage === undefined ? command.options._hoistedOptions[0].value - 1 : this.selPage;
+    let pages = Math.ceil(templates.length / pageDensity);
+
+    interaction.deferUpdate();
+
+    this.selPage += interaction.customId == "next" ? 1 : -1;
+    this.selPage = (this.selPage + pages) % pages;
+
+    command.page = this.selPage;
+
+    await interaction.message.edit({
+        embeds: [await embedPage(command)],
+        components: [(await actionRow()).getComponent()]
+    });
+
+};
+
 const childComponents = [
     new DiscordComponent({
         component:
@@ -63,16 +87,7 @@ const childComponents = [
                 .setStyle(ButtonStyle.Secondary),
         componentType: ComponentType.Button,
         id: "previous",
-        collect: async (i) => {
-            i.deferUpdate();
-            selPage += i.customId == "next" ? 1 : -1;
-            selPage = (selPage + pages) % pages;
-            await i.message.edit({
-                embeds: [await embedPage(client, selPage)],
-                components: components,
-            });
-            
-        }
+        collect: collectEvent
     }),
     new DiscordComponent({
         component:
@@ -82,15 +97,7 @@ const childComponents = [
                 .setStyle(ButtonStyle.Secondary),
         componentType: ComponentType.Button,
         id: "next",
-        collect: async (i) => {
-            i.deferUpdate();
-            selPage += i.customId == "next" ? 1 : -1;
-            selPage = (selPage + pages) % pages;
-            await i.message.edit({
-                embeds: [await embedPage(client, selPage)],
-                components: components,
-            });
-        }
+        collect: collectEvent
     })
 ];
 

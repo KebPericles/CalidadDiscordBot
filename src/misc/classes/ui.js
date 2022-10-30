@@ -53,8 +53,6 @@ module.exports = class DiscordUserInterface {
             }));
         }
 
-        console.log(collectors)
-
         // Search components for each collector
         collectors.forEach(async collector => {
             /**
@@ -73,18 +71,20 @@ module.exports = class DiscordUserInterface {
 
             // We search in the components of the ActionRow and include them in the array if they meet the condition
             actionRowComps.forEach(async rowComp => {
-                comps.push((await rowComp()).childComponents.filter(childComp => {
+                (await rowComp()).childComponents.filter(childComp => {
                     return childComp.componentType === collector.componentType;
-                }))
+                }).forEach(comp => comps.push(comp));
             });
 
             // We add the components that are isolated
-            comps.push(this.components.filter(async component => (await component).componentType === collector.componentType));
+            for (const comp of this.components.filter(async component => (await component).componentType === collector.componentType)) {
+                comps.push(await comp());
+            }
 
             // Then we add the components to the collector
-            collector.on("collect", collectInt => comps.find((comp) => comp.id === collectInt.customId).collect(interaction));
-            collector.on("ignore", collectInt => comps.find((comp) => comp.id === collectInt.customId).ignore(interaction));
-            collector.on("dispose", collectInt => comps.find((comp) => comp.id === collectInt.customId).dispose(interaction));
+            collector.on("collect", async collectInt => await (comps.find(async (comp) => comp.id === collectInt.customId).collect)(collectInt, interaction));
+            collector.on("ignore", async collectInt => await ((comps.find(async (comp) => comp.id === collectInt.customId)).ignore)(collectInt, interaction));
+            collector.on("dispose", async collectInt => await ((comps.find(async (comp) => comp.id === collectInt.customId)).dispose)(collectInt, interaction));
         });
 
     }

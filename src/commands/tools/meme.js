@@ -94,25 +94,12 @@ module.exports = {
 		const message = await interaction.deferReply({
 			fetchReply: true,
 		});
-
-		let subcommand = interaction.options._subcommand;
+		
 		let templates = await getMemeTemplates();
-		let components = [];
+		let subcommand = interaction.options._subcommand;
 
 		switch (subcommand) {
 			case "list":
-				const buttons = new ActionRowBuilder().addComponents(
-					new ButtonBuilder()
-						.setCustomId("previous")
-						.setEmoji("◀️")
-						.setStyle(ButtonStyle.Secondary),
-					new ButtonBuilder()
-						.setCustomId("next")
-						.setEmoji("▶️")
-						.setStyle(ButtonStyle.Secondary)
-				);
-
-				components.push(buttons);
 
 				let pages = Math.ceil(templates.length / pageDensity);
 				let selPage = interaction.options._hoistedOptions[0].value - 1;
@@ -128,8 +115,6 @@ module.exports = {
 
 					return;
 				}
-
-				const listMessage = await interaction.fetchReply();
 
 				/**
 				 * @type {DiscordUserInterface}
