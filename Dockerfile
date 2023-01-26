@@ -6,6 +6,6 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN npm install
+RUN npm install --production=false
 
 CMD ["npm", "run", "dev"]
