@@ -8,4 +8,6 @@ COPY . .
 
 RUN npm install --production=false
 
+RUN npx dotenv-vault pull production
+
 CMD ["npm", "run", "dev"]

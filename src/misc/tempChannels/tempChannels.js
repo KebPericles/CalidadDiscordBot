@@ -1,7 +1,5 @@
-const interfaceHandler = require('@root/src/misc/tempChannels/tempInterfaces.js');
 const { Client, VoiceState, VoiceChannel } = require('discord.js');
 const DiscordChannel = require('../classes/channel');
-const { handleCreateThread, handleDestroyThread, handleOwnerThread } = require('./tempThreads');
 
 const CHANNEL_IDS = {
 	CHISMECITO: '1021992618206433350',
@@ -52,12 +50,13 @@ const getNameArray = (id) => {
  * @param {VoiceState} newState
 */
 const generateChannelName = (newState) => {
+	// TODO HACER EL LOG DE LAS COSAS IMPORTANTES
 	let username = newState.member.nickname;
 	if (!username) {
 		username = newState.member.user.username;
 	}
 
-	console.log(newState.member);
+	// console.log(newState.member);
 	let activities = newState.member.presence.activities;
 	let activityName = username;
 	if (activities.length >= 1 && newState.channelId === CHANNEL_IDS.GAMING) {
@@ -102,16 +101,11 @@ const handleCreateChannel = async (client, oldState, newState) => {
 	// MOVE USER TO CHANNEL
 	newState.member.voice.setChannel(tempVC);
 
-	//CREATE THREAD
-	let threadChannel = await handleCreateThread(newState)
-
-	// CREATE INTERFACE FOR CHANNEL MANAGING
-	interfaceHandler.handleInterface(client, threadChannel, newState);
-
+	// SAVE CHANNEL INFO
 	client.createdChannels.push({
 		memberId: newState.member.id,
 		channelId: tempVC.id,
-		threadId: threadChannel.id
+		threadId: 0
 	});
 };
 
@@ -140,17 +134,11 @@ const handleTransDelChannel = (oldState, newState, client) => {
 	// Handle giving the ownership to a member in the channel
 	if (oldState.channel.members.size !== 0) {
 		channel.memberId = oldState.channel.members.at(0).id;
-
-		// TODO Modify everything else owo
-		//
-		handleOwnerThread(oldState, channel, client);
-
 		return;
 	}
 
 	// Deletes the channel
 	oldState.channel.delete('Porque si');
-	handleDestroyThread(oldState, channel, client);
 	createdChannels.splice(createdChannels.indexOf(channel), 1);
 	console.log(createdChannels)
 }

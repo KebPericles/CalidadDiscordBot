@@ -1,5 +1,5 @@
 require('module-alias/register')
-require('dotenv').config();
+require('dotenv').config("../.env");
 
 const { BOT_TOKEN } = process.env;
 const FUNCTIONS_DIR = 'src/functions';
