@@ -1,3 +1,5 @@
+const ChannelName = require("./channelName");
+
 module.exports = class DiscordChannel{
     /**
      * @type {String}
@@ -11,4 +13,12 @@ module.exports = class DiscordChannel{
      * @type {String}
      */
     threadId;
+	/**
+     * @type {ChannelName}
+     */
+    name;
+	/**
+     * @type {String}
+     */
+    channelType;
 }

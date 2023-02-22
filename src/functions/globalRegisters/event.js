@@ -7,7 +7,7 @@ const EVENTS_DIR = 'src/events';
  * @param {Client} client
  */
 module.exports = (client) => {
-    client.handleEvents = async () => {
+    client.registerEvents = async () => {
         const eventsFolder = fs.readdirSync(`./${EVENTS_DIR}`);
         for (const folder of eventsFolder) {
             const eventFiles = fs.readdirSync(`./${EVENTS_DIR}/${folder}`)
@@ -26,5 +26,6 @@ module.exports = (client) => {
                     break;
             }
         }
-    }
+    };
+	client.registerEvents();
 }
