@@ -1,4 +1,3 @@
-require('module-alias/register')
 require('dotenv').config("../.env.production");
 
 const { BOT_TOKEN } = process.env;
@@ -26,10 +25,10 @@ const functionFolders = fs.readdirSync(`./${FUNCTIONS_DIR}`);
 for (const folder of functionFolders) {
 	if (folder == GLOBAL_DIR) {
 		const functionFiles = fs
-		.readdirSync(`./${FUNCTIONS_DIR}/${folder}`)
+			.readdirSync(`./${FUNCTIONS_DIR}/${folder}`)
 		//.filter((file) => file.endsWith('.register.js'))
 		for (const file of functionFiles) {
-			require(`@root/${FUNCTIONS_DIR}/${folder}/${file}`)(client);	
+			require(`@root/${FUNCTIONS_DIR}/${folder}/${file}`)(client);
 		}
 	} else {
 		require(`@root/${FUNCTIONS_DIR}/${folder}/${folder}.js`)(client);
