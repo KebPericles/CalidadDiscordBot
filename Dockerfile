@@ -10,6 +10,8 @@ RUN npm install --production
 
 COPY * ./
 
+RUN npx dotenv-vault login
+
 RUN npx dotenv-vault pull production
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]
