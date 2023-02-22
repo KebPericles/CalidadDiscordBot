@@ -13,7 +13,7 @@ module.exports = (client) => {
 	/**
 	 * @type {Promise}
 	 */
-	client.handleCommands = async () => {
+	client.registerCommands = async () => {
 		const commandFolders = fs.readdirSync(`./${COMMANDS_DIR}`);
 		for (const folder of commandFolders) {
 			const commandFiles = fs
@@ -47,4 +47,5 @@ module.exports = (client) => {
 			console.log(error);
 		}
 	};
+	client.registerCommands();
 }

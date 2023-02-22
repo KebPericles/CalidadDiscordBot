@@ -4,9 +4,13 @@ RUN mkdir -p /usr/src/app
 
 WORKDIR /usr/src/app
 
-COPY . .
+COPY package*.json ./
 
-RUN npm install --production=false
+RUN npm install
+
+RUN npm install --only=dev
+
+COPY * ./
 
 RUN npx dotenv-vault pull production
 

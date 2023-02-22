@@ -7,7 +7,7 @@ const UIS_DIR = 'src/ui';
  * @param {Client} client
  */
 module.exports = (client) => {
-	client.handleUis = async () => {
+	client.registerUis = async () => {
 		const uisFolder = fs.readdirSync(`./${UIS_DIR}`);
 		for (const folder of uisFolder) {
 			const uisFiles = fs.readdirSync(`./${UIS_DIR}/${folder}`)
@@ -20,5 +20,6 @@ module.exports = (client) => {
 				client.myCustomUis[uiName] = require(`@root/${UIS_DIR}/${folder}/${file}`);
 			}
 		}
-	}
+	};
+	client.registerUis();
 }
