@@ -14,6 +14,7 @@ RUN npx dotenv-vault login
 
 RUN npx dotenv-vault pull production
 
+USER node
+
 CMD ["npm", "start"]
 
-USER node
