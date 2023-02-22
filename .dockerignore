@@ -3,3 +3,8 @@ npm-debug
 README.md
 LICENSE
 .gitignore
+.git
+.env*
+.flaskenv*
+!.env.project
+!.env.vault

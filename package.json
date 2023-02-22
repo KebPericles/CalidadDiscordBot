@@ -4,8 +4,8 @@
   "description": "Un bot de discord con calidad",
   "main": "src/bot.js",
   "scripts": {
-    "start": "node ./src/bot.js",
-    "dev": "nodemon ./src/bot.js"
+    "start": "node src/bot.js",
+    "dev": "nodemon --legacy-watch src/bot.js"
   },
   "author": "Team con Calidad",
   "license": "ISC",

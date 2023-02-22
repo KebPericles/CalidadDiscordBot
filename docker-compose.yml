@@ -1,0 +1,6 @@
+services:
+  bot-js:
+    container_name: nodejs-bot
+    build: ./
+    volumes:
+      - ./:/usr/src/app
