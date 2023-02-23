@@ -12,9 +12,4 @@ RUN npm install --production
 
 COPY --chown=node:node . ./
 
-RUN npx dotenv-vault login
-
-RUN npx dotenv-vault pull production
-
 CMD ["npm", "start"]
-

@@ -1,6 +1,15 @@
+version: '3'
 services:
   bot-js:
     container_name: nodejs-bot
     build: ./
     volumes:
       - ./:/usr/src/app
+    environment:
+      - DOTENV_KEY=dotenv://:key_1192f60e9e16a9ac937334e5222ae2c44a747c8dde626a110a01e5c3a1efc535@dotenv.org/vault/.env.vault?environment=production
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 60s
