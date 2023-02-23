@@ -1,4 +1,3 @@
-require('dotenv').config("../.env.production");
 const mod_alias = require('module-alias');
 
 mod_alias.addAlias('@root', __dirname + '/../');
