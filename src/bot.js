@@ -1,4 +1,4 @@
-require('dotenv').config("../.env.production");
+require('./config.js');
 
 const { BOT_TOKEN } = process.env;
 const FUNCTIONS_DIR = 'src/functions';
@@ -6,7 +6,6 @@ const GLOBAL_DIR = 'globalRegisters';
 
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const fs = require('fs');
-const { builtinModules } = require('module');
 
 const client = new Client({
 	intents: [
