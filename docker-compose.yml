@@ -2,15 +2,19 @@ version: '3'
 services:
   bot-js:
     container_name: nodejs-bot
-    build: ./
+    build: 
+      context: .
+      secrets:
+        - vault_key
     volumes:
-      - ./:/usr/src/app
-      - /usr/src/app/node_modules
-    environment:
-      - DOTENV_KEY=dotenv://:key_1192f60e9e16a9ac937334e5222ae2c44a747c8dde626a110a01e5c3a1efc535@dotenv.org/vault/.env.vault?environment=production
+      - ./src:/usr/src/app/src/
     deploy:
       restart_policy:
         condition: on-failure
         delay: 10s
         max_attempts: 3
         window: 60s
+
+secrets:
+  vault_key:
+    file: secrets/keys.txt

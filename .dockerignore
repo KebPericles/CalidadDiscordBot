@@ -8,3 +8,4 @@ LICENSE
 .flaskenv*
 !.env.project
 !.env.vault
+secrets
