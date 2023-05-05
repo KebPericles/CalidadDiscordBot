@@ -1,17 +1,21 @@
 FROM node:18
 
-RUN mkdir -p /usr/src/app
+RUN mkdir -p /usr/src/app/node_modules && chown -R node:node /usr/src/app
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+COPY --chown=node:node package*.json ./
 
-RUN npm install
+USER node
 
-RUN npm install --only=dev
+RUN npm install --omit=dev
 
-COPY * ./
+COPY --chown=node:node . ./
 
-RUN npx dotenv-vault pull production
+COPY --chown=node:node --chmod=777 ./vaultconf.sh ./
 
-CMD ["npm", "run", "dev"]
+RUN npm install dotenv-vault
+
+RUN --mount=type=secret,id=vault_key,required=true,uid=1000 ./vaultconf.sh
+
+CMD ["npm", "start"]

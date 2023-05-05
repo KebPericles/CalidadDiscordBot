@@ -1,6 +1,20 @@
+version: '3'
 services:
   bot-js:
     container_name: nodejs-bot
-    build: ./
+    build: 
+      context: .
+      secrets:
+        - vault_key
     volumes:
-      - ./:/usr/src/app
+      - ./src:/usr/src/app/src/
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 60s
+
+secrets:
+  vault_key:
+    file: secrets/keys.txt

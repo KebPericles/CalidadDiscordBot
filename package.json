@@ -3,24 +3,28 @@
   "version": "1.0.0",
   "description": "Un bot de discord con calidad",
   "main": "src/bot.js",
-  "scripts": {
-    "start": "node src/bot.js",
-    "dev": "nodemon --legacy-watch src/bot.js"
-  },
-  "author": "Team con Calidad",
-  "license": "ISC",
-  "dependencies": {
-    "discord.js": "^14.4.0",
-    "dotenv": "^16.0.2",
-    "module-alias": "^2.2.2",
-    "node-fetch": "^3.2.10"
-  },
-  "_moduleAliases": {
-    "@root": ".",
-    "@src": "./src",
-    "@ui": "./src/ui"
-  },
   "devDependencies": {
     "nodemon": "^2.0.20"
+  },
+  "scripts": {
+    "start": "node src/bot.js",
+    "dev": "nodemon --legacy-wawtch src/bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KebPericles/CalidadDiscordBot.git"
+  },
+  "author": "Team con Calidad",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/KebPericles/CalidadDiscordBot/issues"
+  },
+  "homepage": "https://github.com/KebPericles/CalidadDiscordBot#readme",
+  "dependencies": {
+    "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3",
+    "dotenv-vault-core": "^0.7.0",
+    "module-alias": "^2.2.2",
+    "node-fetch": "^3.3.0"
   }
 }
