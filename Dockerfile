@@ -1,21 +1,55 @@
+#*------------------------- (ENGLISH)
+#*      AUTHOR: KESOS
+#*      DATE: 03-05-2023
+#*      DESCRIPTION:
+#*       Node's container configuration file.
+#*       Steps for the configuration:
+#*        1. Make the directory structure.
+#*        2. Copy the declaration of node packages and install them.
+#TODO *        3. Copy the last directories of the project.
+#*        4. Copy the DotENV vault configuration script.
+#*        5. Install the dotenv-vault library.
+#*        6. Run the configuration script.
+#*-------------------------
+
+#*------------------------- (ESPAÑOL)
+#*       AUTOR: KESOS
+#*       FECHA: 03-05-2023
+#*       DESCRIPCIÓN:
+#*        Archivo de configuración del contenedor Node para el bot.
+#*        Pasos para la configuración:
+#*         1. Crear la estructura de carpetas.
+#*         2. Copiar la declaración de paquetes de Node e instalarlo.
+#*         3. Copiar el resto del proyecto.
+#*         4. Copiar el script de configuración del DotENV vault.
+#*         5. Instalar la librería dotenv-vault.
+#*         6. Ejecutar el script de configuración.
+#*-------------------------
+
+# IMAGE VERSION
 FROM node:18
 
+# MAKE THE DIRECTORY STRUCTURE AND CHANGE THE PERMISSIONS
 RUN mkdir -p /usr/src/app/node_modules && chown -R node:node /usr/src/app
 
+# SET THE WORKING DIRECTORY
 WORKDIR /usr/src/app
 
+# INSTALLATION OF THE NODE PACKAGES
 COPY --chown=node:node package*.json ./
-
+#*       IMPORTANT NOTE
+#* Default user is root and doing everything with is a potential vulnerability
+#* Source: https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md#non-root-user
 USER node
-
 RUN npm install --omit=dev
 
+# COPY THE REST OF THE PROJECT
 COPY --chown=node:node . ./
 
+# CONFIGURE THE DOTENV VARIABLES
 COPY --chown=node:node --chmod=777 ./vaultconf.sh ./
-
 RUN npm install dotenv-vault
-
 RUN --mount=type=secret,id=vault_key,required=true,uid=1000 ./vaultconf.sh
 
+# RUN IT
 CMD ["npm", "start"]
