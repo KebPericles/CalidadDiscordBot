@@ -6,7 +6,7 @@
 #*       Steps for the configuration:
 #*        1. Make the directory structure.
 #*        2. Copy the declaration of node packages and install them.
-#TODO *        3. Copy the last directories of the project.
+#*        3. Copy the rest of the project.
 #*        4. Copy the DotENV vault configuration script.
 #*        5. Install the dotenv-vault library.
 #*        6. Run the configuration script.

@@ -9,3 +9,7 @@ LICENSE
 !.env.project
 !.env.vault
 secrets
+Dockerfile.dev
+Dockerfile.prod
+docker-compose.yml
+.dockerignore

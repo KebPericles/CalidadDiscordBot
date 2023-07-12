@@ -6,6 +6,7 @@ services:
       context: .
       secrets:
         - vault_key
+      dockerfile: Dockerfile.${ENV}
     volumes:
       - ./src:/usr/src/app/src/
     deploy:
@@ -14,6 +15,8 @@ services:
         delay: 10s
         max_attempts: 3
         window: 60s
+    env_file:
+      - .env
 
 secrets:
   vault_key:
