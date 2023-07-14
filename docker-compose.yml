@@ -9,6 +9,7 @@ services:
       dockerfile: Dockerfile.${ENV}
     volumes:
       - ./src:/usr/src/app/src/
+      - ./logs:/usr/src/app/logs/
     deploy:
       restart_policy:
         condition: on-failure
