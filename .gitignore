@@ -109,3 +109,5 @@ dist
 !.env.vault
 
 secrets
+
+die.js

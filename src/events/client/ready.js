@@ -1,10 +1,11 @@
+const {Events } = require("discord.js");
 const { Event } = require('@root/src/misc/classes/event.js');
 const DiscordEvent = require('../../misc/classes/event');
 /**
  * @type {DiscordEvent}
  */
 module.exports = {
-    name: 'ready',
+    name: Events.ClientReady,
     once: true,
     /**
      * 

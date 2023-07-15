@@ -18,8 +18,13 @@ module.exports = (client) => {
                          * @type { DiscordEvent}
                          */
                         const event = require(`@root/${EVENTS_DIR}/${folder}/${file}`);
-                        if (event.once) client.once(event.name, (...args) => event.execute(...args, client));
-                        else client.on(event.name, (...args) => event.execute(...args, client))
+
+                        if (event.once)
+                            client.once(event.name, (...args) => event.execute(...args, client));
+                        else
+                            client.on(event.name, (...args) => event.execute(...args, client));
+
+                        console.log(`Event ${event.name} has been passed through the handler`);
                     }
                     break;
                 default:
@@ -27,5 +32,5 @@ module.exports = (client) => {
             }
         }
     };
-	client.registerEvents();
+    client.registerEvents();
 }

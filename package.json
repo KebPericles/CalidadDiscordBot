@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node src/bot.js",
-    "dev": "nodemon --legacy-wawtch src/bot.js"
+    "dev": "nodemon --legacy-watch --trace-warnings src/bot.js"
   },
   "repository": {
     "type": "git",

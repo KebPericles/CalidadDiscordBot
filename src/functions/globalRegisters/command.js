@@ -26,9 +26,14 @@ module.exports = (client) => {
 				 * @type {DiscordCommand}
 				 */
 				const command = require(`@root/${COMMANDS_DIR}/${folder}/${file}`);
-				commands.set(command.data.name, command);
-				commandArray.push(command.data.toJSON());
-				console.log(`Command ${command.data.name} has been passed through the handler`);
+
+				if ('data' in command && 'execute' in command) {
+					commands.set(command.data.name, command);
+					commandArray.push(command.data.toJSON());
+					console.log(`Command ${command.data.name} has been passed through the handler`);
+				} else {
+					console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+				}
 			}
 		}
 
@@ -47,5 +52,7 @@ module.exports = (client) => {
 			console.log(error);
 		}
 	};
+
 	client.registerCommands();
+	delete client.commandArray;
 }
