@@ -1,12 +1,12 @@
 //const tmpChanHandler = require('@root/src/misc/tempChannels/tempChannels.js');
-const { VoiceState, Client } = require('discord.js');
+const { VoiceState, Client, Events } = require('discord.js');
 const ChannelRegistry = require('../../misc/classes/channelRegistry');
 const DiscordEvent = require('../../misc/classes/event');
 /**
  * @type {DiscordEvent}
  */
 module.exports = {
-    name: 'voiceStateUpdate',
+    name: Events.VoiceStateUpdate,
     /**
      * 
      * @param {VoiceState} oldState 

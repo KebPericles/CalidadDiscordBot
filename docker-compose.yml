@@ -1,6 +1,24 @@
+version: '3'
 services:
   bot-js:
     container_name: nodejs-bot
-    build: ./
+    build: 
+      context: .
+      secrets:
+        - vault_key
+      dockerfile: Dockerfile.${ENV}
     volumes:
-      - ./:/usr/src/app
+      - ./src:/usr/src/app/src/
+      - ./logs:/usr/src/app/logs/
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 60s
+    env_file:
+      - .env
+
+secrets:
+  vault_key:
+    file: secrets/keys.txt

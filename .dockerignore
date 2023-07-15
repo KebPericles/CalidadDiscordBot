@@ -8,3 +8,7 @@ LICENSE
 .flaskenv*
 !.env.project
 !.env.vault
+secrets
+Dockerfile*
+docker-compose.yml
+.dockerignore

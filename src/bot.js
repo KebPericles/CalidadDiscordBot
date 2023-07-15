@@ -1,5 +1,4 @@
-require('module-alias/register')
-require('dotenv').config("../.env");
+require('./config.js');
 
 const { BOT_TOKEN } = process.env;
 const FUNCTIONS_DIR = 'src/functions';
@@ -7,7 +6,6 @@ const GLOBAL_DIR = 'globalRegisters';
 
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const fs = require('fs');
-const { builtinModules } = require('module');
 
 const client = new Client({
 	intents: [
@@ -26,10 +24,10 @@ const functionFolders = fs.readdirSync(`./${FUNCTIONS_DIR}`);
 for (const folder of functionFolders) {
 	if (folder == GLOBAL_DIR) {
 		const functionFiles = fs
-		.readdirSync(`./${FUNCTIONS_DIR}/${folder}`)
+			.readdirSync(`./${FUNCTIONS_DIR}/${folder}`)
 		//.filter((file) => file.endsWith('.register.js'))
 		for (const file of functionFiles) {
-			require(`@root/${FUNCTIONS_DIR}/${folder}/${file}`)(client);	
+			require(`@root/${FUNCTIONS_DIR}/${folder}/${file}`)(client);
 		}
 	} else {
 		require(`@root/${FUNCTIONS_DIR}/${folder}/${folder}.js`)(client);
