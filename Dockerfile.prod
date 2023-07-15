@@ -37,14 +37,15 @@ WORKDIR /usr/src/app
 
 # INSTALLATION OF THE NODE PACKAGES
 COPY --chown=node:node package*.json ./
+
+# INSTALLATION OF PM2
+RUN npm install pm2@latest -g
 #*       IMPORTANT NOTE
 #* Default user is root and doing everything with is a potential vulnerability
 #* Source: https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md#non-root-user
 USER node
 RUN npm install --omit=dev
 
-# INSTALLATION OF PM2
-RUN npm install pm2@latest -g
 
 # COPY THE REST OF THE PROJECT
 COPY --chown=node:node . ./
