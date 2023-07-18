@@ -1,3 +1,4 @@
+const { ActivityType } = require("discord.js");
 const ChannelName = require("../../misc/classes/channelName");
 const ChannelRegistry = require("../../misc/classes/channelRegistry");
 //const channelTypes = require("./channelTypes");
@@ -50,8 +51,8 @@ const generateChannelPlace = (client, channelType, newState) => {
 	namePool = namePool.filter((chanName) => chanName.isValid(newState));
 
 	let chosenOverrideLevel = -1;
-	for (let i = 0; i < namePool.length; i++) {
-		const currentLevel = namePool[i].overrideLevel;
+	for (const name of namePool) {
+		const currentLevel = name.overrideLevel;
 		if (chosenOverrideLevel < currentLevel) {
 			chosenOverrideLevel = currentLevel;
 		}
@@ -74,16 +75,16 @@ const generateActivityName = (client, channelType, newState) => {
 	let registry = client.tempChannelRegistry;
 	let channelTypes = registry.types;
 
-	let username = newState.member.nickname;
-	if (!username) {
-		username = newState.member.user.username;
+	let activityName = newState.member.nickname || newState.member.user.username;
+
+	let activities = newState.member.presence?.activities || [];
+
+	activities = activities.filter(x => x.type === ActivityType.Playing);
+
+	if (activities.length >= 1 && channelType == channelTypes.GAMING) {
+		activityName = activities[0].name;
 	}
 
-	let activities = newState.member.presence.activities;
-	let activityName = username;
-	if (activities.length >= 1 && channelType == channelTypes.GAMING) {
-		activityName = activities[activities.length - 1].name;
-	}
 	return activityName;
 };
 
