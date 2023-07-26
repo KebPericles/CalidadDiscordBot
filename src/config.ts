@@ -14,7 +14,7 @@ process.on('unhandledRejection', (reason, promise) => {
 	process.exit(1);
 });
 
-function signalHandler(signal) {
+const signalHandler: NodeJS.SignalsListener = (signal) => {
 	console.error(`Received ${signal}`);
 	process.exit(0);
 }

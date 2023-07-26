@@ -1,3 +1,4 @@
+# Build the project
 FROM node:18
 
 RUN mkdir -p /usr/src/app/node_modules
@@ -6,13 +7,22 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm install --only=dev
+RUN npm install -D
+
+# Get .env file
 RUN npm install dotenv-vault -g
 
 COPY .env.vault ./
 
 RUN npx dotenv-vault pull development
 
+# Copy the project and compile it
 COPY src ./src
 
+RUN npm install typescript -g
+
+COPY tsconfig.json ./
+RUN tsc
+
+# Run the project
 CMD ["npm", "run", "dev"]
