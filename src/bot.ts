@@ -1,4 +1,5 @@
-import './config.js';
+import './config';
+import { DiscordCommand, DiscordEvent } from '@src/types';
 
 import {
 	Client,
@@ -6,8 +7,7 @@ import {
 	GatewayIntentBits,
 	RESTPostAPIChatInputApplicationCommandsJSONBody as CommandsJSONBody,
 	Routes,
-	SlashCommandBuilder,
-	Awaitable
+	SlashCommandBuilder
 } from 'discord.js';
 
 import { readdirSync } from 'fs';
@@ -37,11 +37,6 @@ const client = new Client({
 
 // ====================== Update the bot commands commands ====================== //
 const COMMANDS_DIR = 'src/commands'
-
-interface DiscordCommand {
-	data: SlashCommandBuilder;
-	execute: Promise<any>;
-}
 
 let commands = new Collection<string, DiscordCommand>();
 let commandArray: Array<CommandsJSONBody> = [];
@@ -85,12 +80,6 @@ registerComands(commandArray);
 
 // ====================== Update the bot commands events ====================== //
 const EVENTS_DIR = 'src/events';
-
-interface DiscordEvent {
-	name: string;
-	once: boolean | undefined;
-	execute: (...args: any) => Promise<void>;
-}
 
 const eventsFolder = readdirSync(`./${EVENTS_DIR}`);
 for (const folder of eventsFolder) {
