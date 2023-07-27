@@ -2,7 +2,18 @@
 	"compilerOptions": {
 		"target": "es6",
 		"module": "node16",
-		"strict": true
+		"strict": true,
+		"paths": {
+			"@root/*": [
+				"./*"
+			],
+			"@src/*": [
+				"./src/*"
+			],
+			"@tempVC/*": [
+				"./src/functions/tempVoiceChannels/*"
+			],
+		}
 	},
 	"include": [
 		"./src"
