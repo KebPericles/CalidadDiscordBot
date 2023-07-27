@@ -17,12 +17,8 @@ COPY .env.vault ./
 RUN npx dotenv-vault pull development
 
 # Copy the project and compile it
-COPY src ./src
-
-RUN npm install typescript -g
-
 COPY tsconfig.json ./
-RUN tsc
+COPY src ./src
 
 # Run the project
 CMD ["npm", "run", "dev"]
