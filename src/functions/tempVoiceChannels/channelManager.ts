@@ -2,7 +2,7 @@ import { ChannelType, Client, VoiceState } from "discord.js";
 import getCategoryFromID from "./channelCategories";
 import { ConnectedVoiceState } from "@tempVC/types";
 
-const createChannelOptions = (newState: VoiceState, rawName: string) => {
+const createChannelOptions = (newState: ConnectedVoiceState, rawName: string) => {
 	if (newState.channel === null) {
 		throw new Error("The VoiceState channel cannot be null")
 	}
