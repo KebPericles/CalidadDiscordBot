@@ -1,7 +1,5 @@
-const { ActivityType } = require("discord.js");
-const ChannelName = require("../../misc/classes/channelName");
-const ChannelRegistry = require("../../misc/classes/channelRegistry");
-//const channelTypes = require("./channelTypes");
+import { ActivityType, Client } from "discord.js";
+import { ChannelName, ChannelCategory, ConnectedVoiceState } from "@tempVC/types";
 
 const CHISMECITO_NAMES = [
 	new ChannelName(`🪑┃Mesa`),
@@ -25,31 +23,27 @@ const HOMEWORK_NAMES = [
 	new ChannelName(`🌌┃Observatorio`),
 ];
 
-const generateChannelPlace = (client, channelType, newState) => {
-	/**
-	 * @type {ChannelRegistry}
-	 */
-	let registry = client.tempChannelRegistry;
-	let channelTypes = registry.types;
-
+const generateChannelPlace = (category: ChannelCategory, newState: ConnectedVoiceState) => {
 	let namePool;
-	switch (channelType) {
+
+	switch (category) {
 		default:
-		case channelTypes.CHISMECITO:
+		case ChannelCategory.CHISMECITO:
 			namePool = CHISMECITO_NAMES;
 			break;
 
-		case channelTypes.GAMING:
+		case ChannelCategory.GAMING:
 			namePool = GAMING_NAMES;
 			break;
 
-		case channelTypes.HOMEWORK:
+		case ChannelCategory.HOMEWORK:
 			namePool = HOMEWORK_NAMES;
 			break;
 	}
 
-	namePool = namePool.filter((chanName) => chanName.isValid(newState));
+	namePool = namePool.filter((name) => name.isValid(newState));
 
+	/*
 	let chosenOverrideLevel = -1;
 	for (const name of namePool) {
 		const currentLevel = name.overrideLevel;
@@ -57,49 +51,40 @@ const generateChannelPlace = (client, channelType, newState) => {
 			chosenOverrideLevel = currentLevel;
 		}
 	}
+	*/
+
+	const chosenOverrideLevel = namePool.reduce((level, name) => {
+		const currentLevel = name.overrideLevel;
+		return level < currentLevel ? currentLevel : level;
+	}, 0);
 
 	namePool = namePool.filter(
-		(chanName) => chanName.overrideLevel == chosenOverrideLevel
+		(name) => name.overrideLevel === chosenOverrideLevel
 	);
 
 	return namePool[Math.floor(Math.random() * namePool.length)];
 };
 
-/**
- * @param {VoiceState} newState
- */
-const generateActivityName = (client, channelType, newState) => {
-	/**
-	 * @type {ChannelRegistry}
-	 */
-	let registry = client.tempChannelRegistry;
-	let channelTypes = registry.types;
-
+const generateActivityName = (category: ChannelCategory, newState: ConnectedVoiceState) => {
 	let activityName = newState.member.nickname || newState.member.user.username;
 
 	let activities = newState.member.presence?.activities || [];
 
 	activities = activities.filter(x => x.type === ActivityType.Playing);
 
-	if (activities.length >= 1 && channelType == channelTypes.GAMING) {
+	if (activities.length >= 1 && category === ChannelCategory.GAMING) {
 		activityName = activities[0].name;
 	}
 
 	return activityName;
 };
 
-/**
- * @param {VoiceState} newState
- * @returns {ChannelName}
- */
-const generateChannelName = (client, channelType, newState) => {
-	let activityName = generateActivityName(client, channelType, newState);
-	let channelName = generateChannelPlace(client, channelType, newState);
+const generateChannelName = (category: ChannelCategory, newState: ConnectedVoiceState) => {
+	let activityName = generateActivityName(category, newState);
+	let channelName = generateChannelPlace(category, newState);
 
-	channelName.activityName = activityName;
+	channelName.activity = activityName;
 	return channelName;
 };
 
-module.exports.generateChannelPlace = generateChannelPlace;
-module.exports.generateActivityName = generateActivityName;
-module.exports.generateChannelName = generateChannelName;
+export default generateChannelName;

@@ -4,12 +4,24 @@ import { DiscordEvent } from '@src/types';
 const event: DiscordEvent ={
     name: Events.VoiceStateUpdate,
     async execute(oldState: VoiceState, newState: VoiceState, client: Client) {
-        console.log(createdChannels);
+		if (oldState.member === null || newState.member === null) {
+			throw new Error("The voice state did not have a member. This could be a discord error");
+		}
 
-        // Validate out any other action that is not entering or exiting a channel
-        if (oldState.channelId === newState.channelId) return;
+		// Validate out any other action that is not entering or exiting a channel
+		if (oldState.channel?.id === newState.channel?.id) return;
+
+	
+		
+
+		/*
+			NS
+			SN
+		*/
+
 
         // Handle creating a temp channel
+		// Channel ids es CHISMECITO / GAMING / HOMEWORK
         if (channelIds.includes(newState.channelId)) {
             await create(oldState, newState);
         }

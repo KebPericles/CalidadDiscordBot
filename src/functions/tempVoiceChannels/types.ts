@@ -1,4 +1,4 @@
-import {VoiceState} from "discord.js";
+import { GuildMember, Snowflake, VoiceBasedChannel, VoiceState } from "discord.js";
 
 export enum ChannelCategory {
 	CHISMECITO = "CHISMECITO",
@@ -6,30 +6,50 @@ export enum ChannelCategory {
 	HOMEWORK = "HOMEWORK"
 }
 
-export default class ChannelName {
+export class ChannelName {
 	constructor(
-		place: string,
-		activity: string,
+		location: string,
+		activity: string = "",
 		canBeRenamed: boolean = true,
 		overrideLevel: number = 0,
 		predicate: ChannelNamePredicate = () => true
 	) {
-		this.place = place;
-		this.activity = activity;
+		this._location = location;
+		this._activity = activity;
 		this.overrideLevel = overrideLevel;
 		this.isValid = predicate;
 		this.canBeRenamed = canBeRenamed;
 	}
 
-	place: string;
-	activity: string;
-	overrideLevel: number;
-	isValid: ChannelNamePredicate;
-	canBeRenamed: boolean;
+	private _location: string;
+	private _activity: string;
+	private canBeRenamed: boolean;
+	public readonly overrideLevel: number;
+	public isValid: ChannelNamePredicate;
 
-	getRawName = (): string => {
-		return `${this.place} de ${this.activity}`;
+	getChannelName = (): string => {
+		return `${this._location} de ${this.activity}`;
 	};
+
+
+	public set location(v: string) {
+		if (this.canBeRenamed)
+			this._location = v;
+	}
+
+	public get location() {
+		return this._location;
+	}
+
+	public set activity(v: string) {
+		if (this.canBeRenamed || this._activity === null || this._activity.trim() === "")
+			this._activity = v;
+	}
+
+	public get activity() {
+		return this._activity;
+	}
+
 }
 
 export interface DiscordChannel {
@@ -38,6 +58,12 @@ export interface DiscordChannel {
 	threadId: string;
 	name: ChannelName;
 	channelType: string;
+}
+
+export interface ConnectedVoiceState extends VoiceState {
+	channel: VoiceBasedChannel;
+	member: GuildMember;
+	channelId: Snowflake;
 }
 
 export type ChannelNamePredicate = (newState: VoiceState) => boolean;
@@ -50,9 +76,9 @@ export interface ChannelRegistry {
 	delete: (oldState: VoiceState, newState: VoiceState) => void
 	channelIds: Array<string>
 }
-*/
 
 export interface NameGenerator {
 	generateActivityName: (channelType: string, newState: VoiceState) => string;
 	generateNamingObject: (channelType: string, newState: VoiceState) => ChannelName;
 }
+*/
