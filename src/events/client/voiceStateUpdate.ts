@@ -2,7 +2,7 @@ import { VoiceState, Client, Events, NewsChannel } from 'discord.js';
 import { DiscordEvent } from '@src/types';
 import { CHANNEL_IDS } from '@tempVC/channelCategories';
 import { createChannel } from '@tempVC/channelManager';
-
+import { ConnectedVoiceState } from '@tempVC/types';
 
 const event: DiscordEvent = {
 	name: Events.VoiceStateUpdate,
@@ -16,11 +16,7 @@ const event: DiscordEvent = {
 
 		// Validate user entering a generator
 		if (newState.channel !== null && CHANNEL_IDS.includes(newState.channel.id)) {
-
-			// TODO: No se como arreglar ese error, no debería pasar nada, pero no tengo idea
-			// de porqué no compila
-
-			await createChannel(newState);
+			await createChannel(newState as ConnectedVoiceState);
 		}
 
 		// Entering a channel other than a generator does nothing
@@ -35,14 +31,14 @@ const event: DiscordEvent = {
 		);
 
 		if (index === -1) return;
-		
+
 		const prevChannel = createdChannels[index];
 
 		// Delete temp channel if its empty
 		if (oldState.channel.members.size === 0) return deleteChannel(index);
 
 		// Transfer the channel ownership to another member
-		if (oldState.member.id === prevChannel.memberId) 
+		if (oldState.member.id === prevChannel.memberId)
 			return transferChannelOwnership(index, oldState.channel.members.at(0));
 	}
 }

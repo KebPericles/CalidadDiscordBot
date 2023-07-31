@@ -61,7 +61,6 @@ export interface DiscordChannel {
 export interface ConnectedVoiceState extends VoiceState {
 	channel: VoiceBasedChannel;
 	member: GuildMember;
-	channelId: Snowflake;
 }
 
 export type ChannelNamePredicate = (newState: VoiceState) => boolean;
