@@ -1,40 +1,49 @@
-import { VoiceState, Client, Events } from 'discord.js';
+import { VoiceState, Client, Events, NewsChannel } from 'discord.js';
 import { DiscordEvent } from '@src/types';
+import { CHANNEL_IDS } from '@tempVC/channelCategories';
+import { createChannel } from '@tempVC/channelManager';
+
 
 const event: DiscordEvent = {
 	name: Events.VoiceStateUpdate,
 	async execute(oldState: VoiceState, newState: VoiceState, client: Client) {
-		if (oldState.member === null || newState.member === null) {
+		if (!oldState.member || !newState.member) {
 			throw new Error("The voice state did not have a member. This could be a discord error");
 		}
 
-		// Validate out any other action that is not entering or exiting a channel
+		// Validate if the user is entering or exiting a channel
 		if (oldState.channel?.id === newState.channel?.id) return;
 
-		// Case entering a channel
-		if (newState.channel !== null && 
-			(oldState.channel === null || oldState.channel.id !== newState.channel.id)) {
+		// Validate user entering a generator
+		if (newState.channel !== null && CHANNEL_IDS.includes(newState.channel.id)) {
 
+			// TODO: No se como arreglar ese error, no debería pasar nada, pero no tengo idea
+			// de porqué no compila
+
+			await createChannel(newState);
 		}
 
+		// Entering a channel other than a generator does nothing
+		if (oldState.channel === null) return;
 
-		/*
-			NS
-			SN
-		*/
+		// No channel has been created, no need to delete or transfer ownership
+		if (createdChannels.length === 0) return;
 
+		// Check if the previous channel was a tempVc
+		const index = createdChannels.findIndex(
+			(channel) => channel.channelId === oldState.channelId
+		);
 
-		// Handle creating a temp channel
-		// Channel ids es CHISMECITO / GAMING / HOMEWORK
-		if (channelIds.includes(newState.channelId)) {
-			await create(oldState, newState);
-		}
+		if (index === -1) return;
+		
+		const prevChannel = createdChannels[index];
 
-		// Handle moving to a generated channel
-		//if (createdChannels.some((channel) => channel.channelId === newState.channelId)) return;
+		// Delete temp channel if its empty
+		if (oldState.channel.members.size === 0) return deleteChannel(index);
 
-		// Handle moving out of the temp channel created before
-		delete (oldState, newState);
+		// Transfer the channel ownership to another member
+		if (oldState.member.id === prevChannel.memberId) 
+			return transferChannelOwnership(index, oldState.channel.members.at(0));
 	}
 }
 

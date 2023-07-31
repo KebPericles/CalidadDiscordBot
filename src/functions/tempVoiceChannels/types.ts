@@ -26,38 +26,36 @@ export class ChannelName {
 	private canBeRenamed: boolean;
 	public readonly overrideLevel: number;
 	public isValid: ChannelNamePredicate;
-
-	getChannelName = (): string => {
-		return `${this._location} de ${this.activity}`;
-	};
-
-
+	
 	public set location(v: string) {
 		if (this.canBeRenamed)
-			this._location = v;
+		this._location = v;
 	}
-
+	
 	public get location() {
 		return this._location;
 	}
-
+	
 	public set activity(v: string) {
 		if (this.canBeRenamed || this._activity === null || this._activity.trim() === "")
-			this._activity = v;
+		this._activity = v;
 	}
-
+	
 	public get activity() {
 		return this._activity;
 	}
-
+	
+	public get channelName () {
+		return `${this._location} de ${this._activity}`;
+	};
 }
 
 export interface DiscordChannel {
 	memberId: string;
 	channelId: string;
-	threadId: string;
+	//threadId: Snowflake;
 	name: ChannelName;
-	channelType: string;
+	category: ChannelCategory;
 }
 
 export interface ConnectedVoiceState extends VoiceState {

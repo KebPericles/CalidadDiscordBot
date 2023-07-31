@@ -1,14 +1,22 @@
-import { ChannelType, Client, VoiceState } from "discord.js";
+import { CategoryChannel, ChannelType, Client, GuildChannel, VoiceState } from "discord.js";
+import { ChannelCategory, ConnectedVoiceState } from "@tempVC/types";
+import generateChannelName from "./channelNameSupplier";
 import getCategoryFromID from "./channelCategories";
-import { ConnectedVoiceState } from "@tempVC/types";
 
-const createChannelOptions = (newState: ConnectedVoiceState, rawName: string) => {
+interface channelOptions {
+	name: string,
+	type: ChannelType.GuildVoice,
+	position: number,
+	parent: CategoryChannel | null
+}
+
+const createChannelOptions = (newState: ConnectedVoiceState, channelName: string): channelOptions => {
 	if (newState.channel === null) {
 		throw new Error("The VoiceState channel cannot be null")
 	}
 
 	return {
-		name: rawName,
+		name: channelName,
 		type: ChannelType.GuildVoice,
 		position: newState.channel.rawPosition,
 		parent: newState.channel.parent,
@@ -16,30 +24,28 @@ const createChannelOptions = (newState: ConnectedVoiceState, rawName: string) =>
 };
 
 const createChannel = async (newState: ConnectedVoiceState) => {
-	
-	
-	console.log(getCategoryFromID(newState.channelId));
-
-	let nameObject =
-		registry.naming.generateNamingObject(
-			registry.getChannelTypeFromId(newState.channelId),
-			newState
-		);
-	let vcOptions = createChannelOptions(newState, nameObject.getRawName());
+	let category = getCategoryFromID(newState.channel.id) || ChannelCategory.CHISMECITO;
+	let nameObject = generateChannelName(category, newState);
+	let vcOptions = createChannelOptions(newState, nameObject.channelName);
 	let tempVC = await newState.guild.channels.create(vcOptions);
 
 	// MOVE USER TO CHANNEL
 	newState.member.voice.setChannel(tempVC);
 
 	// SAVE CHANNEL INFO
-	client.createdChannels.push({
+	createdChannels.push({
 		memberId: newState.member.id,
 		channelId: tempVC.id,
-		threadId: 0,
+		//threadId: 0,
 		name: nameObject,
-		type: registry.getChannelTypeFromId(newState.channelId)
+		category: category
 	});
 };
+
+const deleteChannel = async (oldState: ConnectedVoiceState) => {
+	oldState.channel.delete("Porque si");
+	createdChannels.splice(createdChannels.indexOf(channel), 1);
+}
 
 /**
  *
@@ -86,7 +92,7 @@ const handleTransDelChannel = (client, oldState, newState) => {
 		}
 	}
 
-	console.log(channel);
+	//console.log(channel);
 
 	// Not owner of the channel
 	if (index === -1 || !channel || oldState.channel === null) return;
@@ -117,5 +123,4 @@ const handleTransDelChannel = (client, oldState, newState) => {
 	createdChannels.splice(createdChannels.indexOf(channel), 1);
 };
 
-module.exports.handleCreateChannel = handleCreateChannel;
-module.exports.handleTransDelChannel = handleTransDelChannel;
+export {createChannel};
