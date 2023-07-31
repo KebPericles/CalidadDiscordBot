@@ -1,7 +1,7 @@
-import { VoiceState, Client, Events, NewsChannel } from 'discord.js';
+import { VoiceState, Client, Events, NewsChannel, GuildMember } from 'discord.js';
 import { DiscordEvent } from '@src/types';
 import { CHANNEL_IDS } from '@tempVC/channelCategories';
-import { createChannel } from '@tempVC/channelManager';
+import { createChannel, deleteChannel, transferChannelOwnership } from '@tempVC/channelManager';
 import { ConnectedVoiceState } from '@tempVC/types';
 
 const event: DiscordEvent = {
@@ -27,7 +27,7 @@ const event: DiscordEvent = {
 
 		// Check if the previous channel was a tempVc
 		const index = createdChannels.findIndex(
-			(channel) => channel.channelId === oldState.channelId
+			(channel) => channel.rawChannel.id === oldState.channelId
 		);
 
 		if (index === -1) return;
@@ -39,7 +39,7 @@ const event: DiscordEvent = {
 
 		// Transfer the channel ownership to another member
 		if (oldState.member.id === prevChannel.memberId)
-			return transferChannelOwnership(index, oldState.channel.members.at(0));
+			return transferChannelOwnership(index, oldState.channel.members.first() as GuildMember);
 	}
 }
 

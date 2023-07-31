@@ -1,6 +1,6 @@
-import { CategoryChannel, ChannelType, Client, GuildChannel, VoiceState } from "discord.js";
+import { CategoryChannel, ChannelType, Client, GuildChannel, GuildMember, VoiceState } from "discord.js";
 import { ChannelCategory, ConnectedVoiceState } from "@tempVC/types";
-import generateChannelName from "./channelNameSupplier";
+import generateChannelName, { generateActivityName } from "./channelNameSupplier";
 import getCategoryFromID from "./channelCategories";
 
 interface channelOptions {
@@ -35,92 +35,33 @@ const createChannel = async (newState: ConnectedVoiceState) => {
 	// SAVE CHANNEL INFO
 	createdChannels.push({
 		memberId: newState.member.id,
-		channelId: tempVC.id,
+		rawChannel: tempVC,
 		//threadId: 0,
 		name: nameObject,
 		category: category
 	});
 };
 
-const deleteChannel = async (oldState: ConnectedVoiceState) => {
-	oldState.channel.delete("Porque si");
-	createdChannels.splice(createdChannels.indexOf(channel), 1);
+const deleteChannel = async (index: number) => {
+	let deletedChannel = createdChannels[index];
+	createdChannels.splice(index, 1);
+	deletedChannel.rawChannel.delete();
 }
 
-/**
- *
- * @param {VoiceState} oldState
- * @param {VoiceState} newState
- * @param {Client} client
- * @returns
- */
-const handleTransDelChannel = (client, oldState, newState) => {
-	/**
-	 * @type {ChannelRegistry}
-	 */
-	let registry = client.tempChannelRegistry;
+const transferChannelOwnership = async (index: number, newOwner: GuildMember) => {
+	const channel = createdChannels[index];
 
-	/**
-	 * @type {Array<DiscordChannel>}
-	 */
-	const createdChannels = client.createdChannels;
-	//console.log(createdChannels);
+	createdChannels[index].memberId = newOwner.id;
+	//newOwner.send(`Ahora eres dueño de <#${createdChannels[index].channelId}>`);
 
-	// Find if its owner of a channel
-	/*let channel = createdChannels.find(({ channelId }) => {
-		return channelId === oldState.channelId;
-	});
-	*/
+	//Generar un nuevo nombre
+	let newActivityName = generateActivityName(
+		channel.category,
+		newOwner.voice as ConnectedVoiceState
+	);
 
-	if (!createdChannels || createdChannels.length === 0) {
-		return;
-	}
+	createdChannels[index].name.activity = newActivityName;
+	channel.rawChannel.setName(channel.name.channelName);
+}
 
-	let index = -1;
-
-	/**
-	 * @type {DiscordChannel}
-	 */
-	let channel;
-
-	for (let i = 0; i < createdChannels.length; i++) {
-		const currentChannel = createdChannels[i];
-		if (currentChannel.channelId === oldState.channelId) {
-			channel = currentChannel;
-			index = i;
-			break;
-		}
-	}
-
-	//console.log(channel);
-
-	// Not owner of the channel
-	if (index === -1 || !channel || oldState.channel === null) return;
-
-	// Handle giving the ownership to a member in the channel
-	if (oldState.channel.members.size !== 0) {
-		if (oldState.member.id == channel.memberId &&
-			(!newState.member.voice || !newState.member.voice.channelId)) {
-
-			let newOwner = oldState.channel.members.at(0);
-			client.createdChannels[index].memberId = newOwner.id;
-			//newOwner.send(`Ahora eres dueño de <#${createdChannels[index].channelId}>`);
-
-			//Generar un nuevo nombre
-			if (channel.name.canBeRenamed) {
-				let newActivityName = registry.naming.generateActivityName(channel.type, newOwner.voice);
-				console.log(newActivityName);
-				client.createdChannels[index].name.activityName = newActivityName;
-				oldState.channel.setName(client.createdChannels[index].name.getRawName());
-			}
-		}
-
-		return;
-	}
-
-	// Deletes the channel
-	oldState.channel.delete("Porque si");
-	createdChannels.splice(createdChannels.indexOf(channel), 1);
-};
-
-export {createChannel};
+export { createChannel, deleteChannel, transferChannelOwnership };

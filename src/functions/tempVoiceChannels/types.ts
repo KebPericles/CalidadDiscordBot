@@ -1,4 +1,4 @@
-import { GuildMember, Snowflake, VoiceBasedChannel, VoiceState } from "discord.js";
+import { GuildMember, VoiceBasedChannel, VoiceState } from "discord.js";
 
 export enum ChannelCategory {
 	CHISMECITO = "CHISMECITO",
@@ -52,7 +52,7 @@ export class ChannelName {
 
 export interface DiscordChannel {
 	memberId: string;
-	channelId: string;
+	rawChannel: VoiceBasedChannel;
 	//threadId: Snowflake;
 	name: ChannelName;
 	category: ChannelCategory;

@@ -88,3 +88,4 @@ const generateChannelName = (category: ChannelCategory, newState: ConnectedVoice
 };
 
 export default generateChannelName;
+export {generateActivityName, generateChannelPlace};
