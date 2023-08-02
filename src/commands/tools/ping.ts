@@ -1,6 +1,8 @@
+import { DiscordCommand } from "@root/src/types";
+
 const { SlashCommandBuilder } = require('discord.js');
 
-module.exports = {
+const command: DiscordCommand = {
     data: new SlashCommandBuilder()
         .setName('ping')
         .setDescription('Information about the ping'),
@@ -14,3 +16,5 @@ module.exports = {
         });
     }
 }
+
+export default command;

@@ -7,7 +7,7 @@ import {
 	GatewayIntentBits,
 	RESTPostAPIChatInputApplicationCommandsJSONBody as CommandsJSONBody,
 	Routes,
-	SlashCommandBuilder
+	EmbedBuilder
 } from 'discord.js';
 
 import { readdirSync } from 'fs';
@@ -35,10 +35,24 @@ const client = new Client({
 	]
 });
 
+defaultEmbed = () => new EmbedBuilder()
+	.setColor(0x0099ff)
+	.setAuthor({
+		name: "Manchas Cyberpunk",
+		iconURL:
+			"https://cdn.discordapp.com/emojis/771974836322959360.webp",
+	})
+	.setThumbnail(client.user?.avatarURL() || null)
+	.setFooter({
+		text: "Bot hecho con calidad por Pan con Queso",
+		iconURL:
+			"https://cdn.discordapp.com/emojis/1001666667828486234.webp",
+	});
+
 // ====================== Update the bot commands commands ====================== //
 const COMMANDS_DIR = 'src/commands'
 
-let commands = new Collection<string, DiscordCommand>();
+commands = new Collection<string, DiscordCommand>();
 let commandArray: Array<CommandsJSONBody> = [];
 
 const commandFolders = readdirSync(`./${COMMANDS_DIR}`);

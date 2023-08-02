@@ -13,9 +13,16 @@
 			"@tempVC/*": [
 				"./src/functions/tempVoiceChannels/*"
 			],
+			"@meme/*": [
+				"./src/functions/meme/*"
+			],
 		}
 	},
 	"include": [
 		"./src"
+	],
+	"exclude": [
+		"./node_modules",
+		"./src/**/*.ignore.ts"
 	]
 }

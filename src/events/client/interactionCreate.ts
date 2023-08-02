@@ -1,14 +1,9 @@
-const { CommandInteraction, Client, Events } = require("discord.js");
+import { CommandInteraction, Client, Events } from "discord.js";
 
-module.exports = {
+const event = {
     name: Events.InteractionCreate,
-    /**
-	 * @param {CommandInteraction} interaction
-	 * @param {Client} client
-	 */
-    async execute(interaction, client) {
+    async execute(interaction: CommandInteraction, client: Client) {
         if (interaction.isChatInputCommand()) {
-            const { commands } = client;
             const { commandName } = interaction;
             const command = commands.get(commandName);
 
@@ -18,7 +13,7 @@ module.exports = {
                 await command.execute(interaction, client);
             } catch (error) {
                 console.error(error);
-                await interaction.editReply({
+                await interaction.reply({
                     content: `Something went wrong while executing this command`,
                     ephemeral: true
                 })
@@ -26,3 +21,5 @@ module.exports = {
         }
     }
 }
+
+export default event;
