@@ -29,10 +29,10 @@ export class DiscordComponent {
 		return row;
 	}
 
+	id: string = "";
 	isRowComponent: boolean = false;
 	component: ComponentBuilder;
 	childComponents: Array<DiscordComponent>;
-	id: string = "";
 	componentType: ComponentType;
 	dispose: (interaction: ButtonInteraction, commandInteraction: CommandInteraction) => Awaitable<void> = (): Awaitable<void> => { };
 	collect: (interaction: ButtonInteraction, commandInteraction: CommandInteraction) => Awaitable<void> = (): Awaitable<void> => { };
