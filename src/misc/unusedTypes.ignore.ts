@@ -86,7 +86,7 @@ export class DiscordUserInterface {
 		for (const collector of this.collectorsToCreate) {
 			collectors.push((await interaction.fetchReply()).createMessageComponentCollector({
 				componentType: collector.componentType,
-				time: collector.time
+				time:          collector.time
 			}));
 		}
 
@@ -119,8 +119,8 @@ export class DiscordUserInterface {
 			}
 
 			// Then we add the components to the collector
-			collector.on("collect", async collectInt => await (comps.find(async (comp) => comp.id === collectInt.customId).collect)(collectInt, interaction));
-			collector.on("ignore", async collectInt => await ((comps.find(async (comp) => comp.id === collectInt.customId)).ignore)(collectInt, interaction));
+			collector.on("collect", async collectInt => await ((comps.find(async (comp) => comp.id === collectInt.customId)).collect)(collectInt, interaction));
+			collector.on("ignore" , async collectInt => await ((comps.find(async (comp) => comp.id === collectInt.customId)).ignore )(collectInt, interaction));
 			collector.on("dispose", async collectInt => await ((comps.find(async (comp) => comp.id === collectInt.customId)).dispose)(collectInt, interaction));
 		});
 
