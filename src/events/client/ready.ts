@@ -1,4 +1,4 @@
-import { DiscordEvent } from "@src/types";
+import { DiscordEvent } from "#src/types";
 import { Client, Events } from "discord.js";
 
 const event: DiscordEvent = {

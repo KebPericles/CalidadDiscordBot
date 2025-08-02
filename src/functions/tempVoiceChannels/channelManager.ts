@@ -1,5 +1,5 @@
 import { CategoryChannel, ChannelType, Client, GuildChannel, GuildMember, VoiceState } from "discord.js";
-import { ChannelCategory, ConnectedVoiceState } from "@tempVC/types";
+import { ChannelCategory, ConnectedVoiceState } from "#tempVC/types";
 import generateChannelName, { generateActivityName } from "./channelNameSupplier";
 import getCategoryFromID from "./channelCategories";
 

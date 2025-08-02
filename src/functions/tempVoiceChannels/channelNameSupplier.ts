@@ -1,5 +1,5 @@
 import { ActivityType, Client } from "discord.js";
-import { ChannelName, ChannelCategory, ConnectedVoiceState } from "@tempVC/types";
+import { ChannelName, ChannelCategory, ConnectedVoiceState } from "#tempVC/types";
 
 const CHISMECITO_NAMES = [
 	new ChannelName(`🪑┃Mesa`),

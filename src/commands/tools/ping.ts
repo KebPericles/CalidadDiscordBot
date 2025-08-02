@@ -1,4 +1,4 @@
-import { DiscordCommand } from "@root/src/types";
+import { DiscordCommand } from "#root/src/types";
 
 const { SlashCommandBuilder } = require('discord.js');
 

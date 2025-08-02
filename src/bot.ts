@@ -1,5 +1,5 @@
 import './config';
-import { DiscordCommand, DiscordEvent } from '@src/types';
+import { DiscordCommand, DiscordEvent } from '#src/types';
 
 import {
 	Client,
@@ -35,7 +35,7 @@ const client = new Client({
 	]
 });
 
-defaultEmbed = () => new EmbedBuilder()
+global.defaultEmbed = () => new EmbedBuilder()
 	.setColor(0x0099ff)
 	.setAuthor({
 		name: "Manchas Cyberpunk",
@@ -52,7 +52,8 @@ defaultEmbed = () => new EmbedBuilder()
 // ====================== Update the bot commands commands ====================== //
 const COMMANDS_DIR = 'src/commands'
 
-commands = new Collection<string, DiscordCommand>();
+global.commands = new Collection<string, DiscordCommand>();
+global.createdChannels = [];
 let commandArray: Array<CommandsJSONBody> = [];
 
 const commandFolders = readdirSync(`./${COMMANDS_DIR}`);
@@ -65,9 +66,9 @@ for (const folder of commandFolders) {
 		.filter((file) => file.endsWith('.ts'));
 
 	for (const file of commandFiles) {
-		const command: DiscordCommand = require(`@root/${COMMANDS_DIR}/${folder}/${file}`);
+		const command: DiscordCommand = require(`#root/${COMMANDS_DIR}/${folder}/${file}`);
 
-		commands.set(command.data.name, command);
+		global.commands.set(command.data.name, command);
 		commandArray.push(command.data.toJSON());
 		console.log(`Command ${command.data.name} has been passed through the handler`);
 	}
@@ -86,11 +87,15 @@ const registerComands = async (commandArray: Array<CommandsJSONBody>) => {
 
 		console.log('Successfully registered application commands.');
 	} catch (error) {
-		console.log(error);
+		console.error('Error registering commands:', error);
+		throw error;
 	}
 }
 
-registerComands(commandArray);
+registerComands(commandArray).catch(error => {
+	console.error('Failed to register commands:', error);
+	process.exit(1);
+});
 
 // ====================== Update the bot commands events ====================== //
 const EVENTS_DIR = 'src/events';
@@ -103,7 +108,7 @@ for (const folder of eventsFolder) {
 
 	const eventFiles = readdirSync(`./${EVENTS_DIR}/${folder}`)
 	for (const file of eventFiles) {
-		const event: DiscordEvent = require(`@root/${EVENTS_DIR}/${folder}/${file}`);
+		const event: DiscordEvent = require(`#root/${EVENTS_DIR}/${folder}/${file}`);
 
 		if (event.once)
 			client.once(event.name, async (...args) => event.execute(...args, client));

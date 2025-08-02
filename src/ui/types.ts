@@ -113,6 +113,19 @@ export class DiscordUIBuilder implements InteractionReplyOptions {
 	}
 }
 
-const hola = new DiscordUIBuilder().addRow((row) =>
-	row.
-)
+export class DiscordRowBuilder {
+	private _components: any[];
+
+	constructor() {
+		this._components = [];
+	}
+
+	get components() {
+		return this._components;
+	}
+
+	public addButton() {
+		// Implementation for adding button
+		return this;
+	}
+}

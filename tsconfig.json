@@ -3,23 +3,22 @@
 		"target": "es6",
 		"module": "node16",
 		"strict": true,
+		"isolatedModules": true,
 		"paths": {
-			"@root/*": [
+			"#root/*": [
 				"./*"
 			],
-			"@src/*": [
+			"#src/*": [
 				"./src/*"
 			],
-			"@tempVC/*": [
+			"#tempVC/*": [
 				"./src/functions/tempVoiceChannels/*"
-			],
-			"@meme/*": [
-				"./src/functions/meme/*"
-			],
+			]
 		}
 	},
 	"include": [
-		"./src"
+		"./src",
+		"./tests"
 	],
 	"exclude": [
 		"./node_modules",

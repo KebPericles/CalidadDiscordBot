@@ -1,8 +1,8 @@
 import { VoiceState, Client, Events, NewsChannel, GuildMember } from 'discord.js';
-import { DiscordEvent } from '@src/types';
-import { CHANNEL_IDS } from '@tempVC/channelCategories';
-import { createChannel, deleteChannel, transferChannelOwnership } from '@tempVC/channelManager';
-import { ConnectedVoiceState } from '@tempVC/types';
+import { DiscordEvent } from '#src/types';
+import { CHANNEL_IDS } from '#tempVC/channelCategories';
+import { createChannel, deleteChannel, transferChannelOwnership } from '#tempVC/channelManager';
+import { ConnectedVoiceState } from '#tempVC/types';
 
 const event: DiscordEvent = {
 	name: Events.VoiceStateUpdate,

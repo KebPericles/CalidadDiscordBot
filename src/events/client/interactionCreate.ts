@@ -1,11 +1,12 @@
 import { CommandInteraction, Client, Events } from "discord.js";
+import { DiscordEvent } from "#src/types";
 
-const event = {
+const event: DiscordEvent = {
     name: Events.InteractionCreate,
     async execute(interaction: CommandInteraction, client: Client) {
         if (interaction.isChatInputCommand()) {
             const { commandName } = interaction;
-            const command = commands.get(commandName);
+            const command = global.commands.get(commandName);
 
             if (!command) return;
 
@@ -13,10 +14,19 @@ const event = {
                 await command.execute(interaction, client);
             } catch (error) {
                 console.error(error);
-                await interaction.reply({
-                    content: `Something went wrong while executing this command`,
-                    ephemeral: true
-                })
+                const errorMessage = "Something went wrong while executing this command";
+                
+                if (interaction.replied || interaction.deferred) {
+                    await interaction.followUp({
+                        content: errorMessage,
+                        ephemeral: true
+                    });
+                } else {
+                    await interaction.reply({
+                        content: errorMessage,
+                        ephemeral: true
+                    });
+                }
             }
         }
     }

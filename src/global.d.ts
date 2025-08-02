@@ -1,4 +1,4 @@
-import { DiscordChannel } from "@tempVC/types";
+import { DiscordChannel } from "#tempVC/types";
 import { Collection, EmbedBuilder } from "discord.js";
 import { DiscordCommand } from "./types";
 

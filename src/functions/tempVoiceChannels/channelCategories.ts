@@ -1,4 +1,4 @@
-import {ChannelCategory} from '@tempVC/types';
+import {ChannelCategory} from '#tempVC/types';
 
 const { CHISMECITO_ID, GAMING_ID, HOMEWORK_ID } = process.env;
 
