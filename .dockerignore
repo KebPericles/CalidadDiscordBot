@@ -4,7 +4,6 @@ README.md
 LICENSE
 .gitignore
 .git
-.env.keys
 .flaskenv*
 secrets
 Dockerfile*
