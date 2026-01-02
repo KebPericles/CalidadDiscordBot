@@ -40,6 +40,8 @@ COPY --chown=node:node package*.json ./
 
 # INSTALLATION OF PM2
 RUN npm install pm2@latest -g
+RUN npm install typescript@5.9.3 -g
+
 #*       IMPORTANT NOTE
 #* Default user is root and doing everything with is a potential vulnerability
 #* Source: https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md#non-root-user
@@ -49,6 +51,10 @@ RUN npm install --omit=dev
 
 # COPY THE REST OF THE PROJECT
 COPY --chown=node:node . ./
+
+RUN npm run build
+COPY --chown=node:node .env ./dist/
+COPY --chown=node:node .env.calidad ./dist/
 
 # RUN IT
 CMD ["pm2-runtime", "start", "ecosystem.config.js"]

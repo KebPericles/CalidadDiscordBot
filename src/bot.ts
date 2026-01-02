@@ -59,7 +59,7 @@ for (const folder of commandFolders) {
 	}
 
 	const commandFiles = readdirSync(`./${COMMANDS_DIR}/${folder}`).filter(
-		(file) => file.endsWith(".ts")
+		(file) => file.endsWith(".ts") || file.endsWith(".js")
 	);
 
 	for (const file of commandFiles) {

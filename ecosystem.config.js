@@ -21,12 +21,13 @@ const STAGES_CONFIG = {
         },
 }
 
-const stage_config = {...DEFAULT_CONFIG, ...STAGES_CONFIG[process.env.ENV]};
+const stage_config = { ...DEFAULT_CONFIG, ...STAGES_CONFIG[process.env.ENV] };
 
 module.exports = {
         apps: [{
                 name: 'nodejs-bot',
                 script: 'src/bot.js',
+                cwd: './dist',
                 instances: '1',
                 exec_mode: 'cluster',
                 watch: false,
