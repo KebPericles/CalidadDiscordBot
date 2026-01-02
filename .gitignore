@@ -103,10 +103,9 @@ dist
 # TernJS port file
 .tern-port
 
-.env*
+.env
+.env.keys
 .flaskenv*
-!.env.project
-!.env.vault
 
 secrets
 

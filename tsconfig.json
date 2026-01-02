@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"target": "es6",
+		"module": "node16",
+		"strict": true,
+		"isolatedModules": true,
+		"paths": {
+			"#root/*": ["./*"],
+			"#src/*": ["./src/*"],
+			"#tempVC/*": ["./src/functions/tempVoiceChannels/*"]
+		},
+	},
+	"include": ["./src", "./tests"],
+	"exclude": ["./node_modules", "./src/**/*.ignore.ts"]
+}

@@ -4,10 +4,8 @@ README.md
 LICENSE
 .gitignore
 .git
-.env*
+.env.keys
 .flaskenv*
-!.env.project
-!.env.vault
 secrets
 Dockerfile*
 docker-compose.yml

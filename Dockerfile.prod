@@ -50,10 +50,5 @@ RUN npm install --omit=dev
 # COPY THE REST OF THE PROJECT
 COPY --chown=node:node . ./
 
-# CONFIGURE THE DOTENV VARIABLES
-COPY --chown=node:node --chmod=777 ./vaultconf.sh ./
-RUN npm install dotenv-vault
-RUN --mount=type=secret,id=vault_key,required=true,uid=1000 ./vaultconf.sh
-
 # RUN IT
 CMD ["pm2-runtime", "start", "ecosystem.config.js"]
