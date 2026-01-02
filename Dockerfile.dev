@@ -10,11 +10,8 @@ COPY package*.json ./
 RUN npm install -D
 
 # Get .env file
-RUN npm install dotenv-vault -g
-
-COPY .env.vault ./
-
-RUN npx dotenv-vault pull development
+COPY .env ./
+COPY .env.quesito ./
 
 # Copy the project and compile it
 COPY tsconfig.json ./

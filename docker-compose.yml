@@ -4,12 +4,13 @@ services:
     container_name: nodejs-bot
     build: 
       context: .
-      secrets:
-        - vault_key
-      dockerfile: Dockerfile.${ENV}
+      dockerfile: Dockerfile.${DOCKERFILE_ENV:-dev}
     volumes:
       - ./src:/usr/src/app/src/
       - ./logs:/usr/src/app/logs/
+    environment:
+      # Used by config.ts to load the keys when running in docker
+      - DOCKER_SECRETS_ENV_KEYS_PATH=/run/secrets/env_keys
     deploy:
       restart_policy:
         condition: on-failure
@@ -18,7 +19,9 @@ services:
         window: 60s
     env_file:
       - .env
+    secrets:
+      - env_keys
 
 secrets:
-  vault_key:
-    file: secrets/keys.txt
+  env_keys:
+    file: ./.env.keys

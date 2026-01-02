@@ -23,9 +23,8 @@
 		"typescript": "^5.9.2"
 	},
 	"dependencies": {
+		"@dotenvx/dotenvx": "^1.51.4",
 		"discord.js": "^14.7.1",
-		"dotenv": "^16.0.3",
-		"dotenv-vault-core": "^0.7.0",
 		"module-alias": "^2.2.2",
 		"node-fetch": "^3.3.0"
 	},
