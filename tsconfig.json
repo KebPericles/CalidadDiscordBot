@@ -5,23 +5,11 @@
 		"strict": true,
 		"isolatedModules": true,
 		"paths": {
-			"#root/*": [
-				"./*"
-			],
-			"#src/*": [
-				"./src/*"
-			],
-			"#tempVC/*": [
-				"./src/functions/tempVoiceChannels/*"
-			]
-		}
+			"#root/*": ["./*"],
+			"#src/*": ["./src/*"],
+			"#tempVC/*": ["./src/functions/tempVoiceChannels/*"]
+		},
 	},
-	"include": [
-		"./src",
-		"./tests"
-	],
-	"exclude": [
-		"./node_modules",
-		"./src/**/*.ignore.ts"
-	]
+	"include": ["./src", "./tests"],
+	"exclude": ["./node_modules", "./src/**/*.ignore.ts"]
 }

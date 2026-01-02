@@ -1,18 +1,28 @@
-import { CategoryChannel, ChannelType, Client, GuildChannel, GuildMember, VoiceState } from "discord.js";
+import {
+	CategoryChannel,
+	ChannelType,
+	GuildMember,
+} from "discord.js";
 import { ChannelCategory, ConnectedVoiceState } from "#tempVC/types";
-import generateChannelName, { generateActivityName } from "./channelNameSupplier";
+import generateChannelName, {
+	generateActivityName,
+} from "./channelNameSupplier";
 import getCategoryFromID from "./channelCategories";
+import { createdChannels } from "#src/global";
 
 interface channelOptions {
-	name: string,
-	type: ChannelType.GuildVoice,
-	position: number,
-	parent: CategoryChannel | null
+	name: string;
+	type: ChannelType.GuildVoice;
+	position: number;
+	parent: CategoryChannel | null;
 }
 
-const createChannelOptions = (newState: ConnectedVoiceState, channelName: string): channelOptions => {
+const createChannelOptions = (
+	newState: ConnectedVoiceState,
+	channelName: string
+): channelOptions => {
 	if (newState.channel === null) {
-		throw new Error("The VoiceState channel cannot be null")
+		throw new Error("The VoiceState channel cannot be null");
 	}
 
 	return {
@@ -24,7 +34,8 @@ const createChannelOptions = (newState: ConnectedVoiceState, channelName: string
 };
 
 const createChannel = async (newState: ConnectedVoiceState) => {
-	let category = getCategoryFromID(newState.channel.id) || ChannelCategory.CHISMECITO;
+	let category =
+		getCategoryFromID(newState.channel.id) || ChannelCategory.CHISMECITO;
 	let nameObject = generateChannelName(category, newState);
 	let vcOptions = createChannelOptions(newState, nameObject.channelName);
 	let tempVC = await newState.guild.channels.create(vcOptions);
@@ -38,7 +49,7 @@ const createChannel = async (newState: ConnectedVoiceState) => {
 		rawChannel: tempVC,
 		//threadId: 0,
 		name: nameObject,
-		category: category
+		category: category,
 	});
 };
 
@@ -46,9 +57,12 @@ const deleteChannel = async (index: number) => {
 	let deletedChannel = createdChannels[index];
 	createdChannels.splice(index, 1);
 	deletedChannel.rawChannel.delete();
-}
+};
 
-const transferChannelOwnership = async (index: number, newOwner: GuildMember) => {
+const transferChannelOwnership = async (
+	index: number,
+	newOwner: GuildMember
+) => {
 	const channel = createdChannels[index];
 
 	createdChannels[index].memberId = newOwner.id;
@@ -62,6 +76,6 @@ const transferChannelOwnership = async (index: number, newOwner: GuildMember) =>
 
 	createdChannels[index].name.activity = newActivityName;
 	channel.rawChannel.setName(channel.name.channelName);
-}
+};
 
 export { createChannel, deleteChannel, transferChannelOwnership };

@@ -1,21 +1,37 @@
-import { VoiceState, Client, Events, NewsChannel, GuildMember } from 'discord.js';
-import { DiscordEvent } from '#src/types';
-import { CHANNEL_IDS } from '#tempVC/channelCategories';
-import { createChannel, deleteChannel, transferChannelOwnership } from '#tempVC/channelManager';
-import { ConnectedVoiceState } from '#tempVC/types';
+import {
+	VoiceState,
+	Client,
+	Events,
+	NewsChannel,
+	GuildMember,
+} from "discord.js";
+import { DiscordEvent } from "#src/types";
+import { CHANNEL_IDS } from "#tempVC/channelCategories";
+import {
+	createChannel,
+	deleteChannel,
+	transferChannelOwnership,
+} from "#tempVC/channelManager";
+import { ConnectedVoiceState } from "#tempVC/types";
+import { createdChannels } from "#src/global";
 
 const event: DiscordEvent = {
 	name: Events.VoiceStateUpdate,
 	async execute(oldState: VoiceState, newState: VoiceState, client: Client) {
 		if (!oldState.member || !newState.member) {
-			throw new Error("The voice state did not have a member. This could be a discord error");
+			throw new Error(
+				"The voice state did not have a member. This could be a discord error"
+			);
 		}
 
 		// Validate if the user is entering or exiting a channel
 		if (oldState.channel?.id === newState.channel?.id) return;
 
 		// Validate user entering a generator
-		if (newState.channel !== null && CHANNEL_IDS.includes(newState.channel.id)) {
+		if (
+			newState.channel !== null &&
+			CHANNEL_IDS.includes(newState.channel.id)
+		) {
 			await createChannel(newState as ConnectedVoiceState);
 		}
 
@@ -39,8 +55,11 @@ const event: DiscordEvent = {
 
 		// Transfer the channel ownership to another member
 		if (oldState.member.id === prevChannel.memberId)
-			return transferChannelOwnership(index, oldState.channel.members.first() as GuildMember);
-	}
-}
+			return transferChannelOwnership(
+				index,
+				oldState.channel.members.first() as GuildMember
+			);
+	},
+};
 
-export default event;
+export { event };
