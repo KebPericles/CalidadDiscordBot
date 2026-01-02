@@ -54,6 +54,7 @@ COPY --chown=node:node . ./
 
 RUN npm run build
 COPY --chown=node:node .env ./dist/
+COPY --chown=node:node .env.quesito ./dist/
 COPY --chown=node:node .env.calidad ./dist/
 
 # RUN IT
